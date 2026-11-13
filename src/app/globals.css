@@ -1,0 +1,143 @@
+@import "tailwindcss";
+
+/* MO WORLD — Official UI Design System Tokens (Light & Dark Mode) */
+:root {
+  --bg-primary: #F6F5F2;         /* Studio Alabaster */
+  --bg-surface: #ECEAE4;         /* Soft Warm Stone */
+  --border-subtle: #DCD8CF;      /* Hairline Border (1px) */
+  --text-primary: #0E1012;       /* Deep Obsidian */
+  --text-muted: #5C6166;         /* Secondary Copy */
+  --brand-accent: #1F5668;       /* Petrol Slate */
+  --brand-accent-hover: #163F4D; /* Petrol Hover */
+  --brand-stone: #DDD8CE;        /* Editorial Warm Stone */
+  --brand-warm-stone: #DDD8CE;
+  --radius-ui: 4px;
+
+  /* shadcn-compatible semantic aliases */
+  --background: #F6F5F2;
+  --foreground: #0E1012;
+  --card: #ECEAE4;
+  --card-foreground: #0E1012;
+  --muted: #ECEAE4;
+  --muted-foreground: #5C6166;
+  --border: #DCD8CF;
+  --ring: #1F5668;
+  --primary: #1F5668;
+  --primary-foreground: #F6F5F2;
+}
+
+[data-theme="dark"] {
+  --bg-primary: #0A0C0E;         /* Deep Obsidian Dark */
+  --bg-surface: #13171B;         /* Carbon Slate Card */
+  --border-subtle: #22282E;      /* Dark Hairline Border (1px) */
+  --text-primary: #F6F5F2;       /* Studio Alabaster */
+  --text-muted: #949BA2;         /* Muted Silver-Slate */
+  --brand-accent: #286D84;       /* Luminous Petrol Slate */
+  --brand-accent-hover: #32829C; /* Luminous Hover */
+  --brand-stone: #C5C1B4;        /* Warm Stone Accent */
+  --brand-warm-stone: #C5C1B4;
+  --radius-ui: 4px;
+
+  /* shadcn-compatible semantic aliases */
+  --background: #0A0C0E;
+  --foreground: #F6F5F2;
+  --card: #13171B;
+  --card-foreground: #F6F5F2;
+  --muted: #13171B;
+  --muted-foreground: #949BA2;
+  --border: #22282E;
+  --ring: #286D84;
+  --primary: #286D84;
+  --primary-foreground: #F6F5F2;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --font-sans: var(--font-ar), var(--font-en), system-ui, sans-serif;
+  --font-serif: var(--font-editorial), Georgia, serif;
+  --font-mono: var(--font-en), monospace;
+}
+
+* {
+  border-color: var(--border-subtle);
+}
+
+html,
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-ar), var(--font-en), system-ui, sans-serif;
+  line-height: 1.7;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.font-editorial {
+  font-family: var(--font-editorial), Georgia, serif;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+}
+
+.font-en {
+  font-family: var(--font-en), system-ui, sans-serif;
+}
+
+.micro-label {
+  font-family: var(--font-en), system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+}
+
+/* Instant zero-hydration-mismatch logo switching */
+[data-theme="dark"] .show-in-light {
+  display: none !important;
+}
+:root:not([data-theme="dark"]) .show-in-dark {
+  display: none !important;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes drawerSlideInRight {
+  from {
+    transform: translate3d(100%, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes drawerSlideInLeft {
+  from {
+    transform: translate3d(-100%, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.animate-drawer-right {
+  animation: drawerSlideInRight 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-drawer-left {
+  animation: drawerSlideInLeft 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
