@@ -7,12 +7,12 @@ import type { Product, SubBrand } from "@/lib/types";
 import { ProductCard } from "./ProductCard";
 import { ProductQuickModal } from "./ProductQuickModal";
 
-const TABS: Array<{ key: "ALL" | SubBrand; labelAr: string; labelEn: string }> = [
-  { key: "ALL", labelAr: "مختارات الدار", labelEn: "CURATED EDIT" },
-  { key: "MO / KIDS", labelAr: "أطفال", labelEn: "MO / KIDS" },
-  { key: "MO / ESSENTIALS", labelAr: "الأساسيات", labelEn: "MO / ESSENTIALS" },
-  { key: "MO / STUDIO", labelAr: "الاستوديو", labelEn: "MO / STUDIO" },
-  { key: "MO / ARCHIVE", labelAr: "الأرشيف", labelEn: "MO / ARCHIVE" },
+const TABS: Array<{ key: "ALL" | SubBrand; labelAr: string }> = [
+  { key: "ALL", labelAr: "الكل" },
+  { key: "MO / KIDS", labelAr: "أطفال" },
+  { key: "MO / ESSENTIALS", labelAr: "الأساسيات" },
+  { key: "MO / STUDIO", labelAr: "الاستوديو" },
+  { key: "MO / ARCHIVE", labelAr: "الأرشيف" },
 ];
 
 export function HomeFeaturedGallery({ products }: { products: Product[] }) {
@@ -33,32 +33,23 @@ export function HomeFeaturedGallery({ products }: { products: Product[] }) {
   }, [available, activeTab]);
 
   return (
-    <section className="border-b border-[var(--border-subtle)] bg-[var(--bg-primary)] py-16 sm:py-20">
+    <section className="border-b border-[var(--border-subtle)] bg-[var(--bg-primary)] py-14 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-          <div>
-            <p dir="ltr" className="micro-label text-right text-[var(--brand-accent)]">
-              GALLERY CATALOG // 4:5 STUDIO VIEW
-            </p>
-            <h2 className="mt-2 text-2xl font-bold tracking-tight text-[var(--text-primary)] sm:text-3xl">
-              تشكيلة الموسم المختارة
-            </h2>
-            <p className="mt-1 text-xs text-[var(--text-muted)] sm:text-sm">
-              اضغط على علامة (+) لإضافة المقاس مباشرة، أو افتح القطعة لمعاينة الوجه والظهر وجدول المقاسات.
-            </p>
-          </div>
-
-          <Link
-            href="/shop"
-            className="inline-flex shrink-0 items-center gap-2 self-start rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-4 py-2.5 text-xs font-semibold text-[var(--text-primary)] transition-colors hover:border-[var(--text-primary)] sm:self-auto"
-          >
-            <span>عرض الكتالوج الكامل ({available.length})</span>
-            <ArrowLeft className="size-3.5" strokeWidth={1.5} />
-          </Link>
+        {/* Symmetric Centered Header */}
+        <div className="mx-auto max-w-xl text-center">
+          <p dir="ltr" className="micro-label text-[var(--brand-accent)]">
+            GALLERY EDIT
+          </p>
+          <h2 className="mt-1.5 text-2xl font-bold text-[var(--text-primary)] sm:text-3xl">
+            مختارات الموسم
+          </h2>
+          <p className="mt-1 text-xs text-[var(--text-muted)] sm:text-sm">
+            اضغط (+) لإضافة مقاسك مباشرة أو افتح القطعة لمعاينة التفاصيل.
+          </p>
         </div>
 
-        {/* Architectural Slash Filter Strip */}
-        <div className="no-scrollbar mt-6 flex items-center gap-2 overflow-x-auto pb-1">
+        {/* Symmetric Single-Row Filter Pills (Fits 100% on mobile without clipping) */}
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
           {TABS.map((tab) => {
             const active = activeTab === tab.key;
             return (
@@ -66,30 +57,20 @@ export function HomeFeaturedGallery({ products }: { products: Product[] }) {
                 key={tab.key}
                 type="button"
                 onClick={() => setActiveTab(tab.key)}
-                className={`inline-flex shrink-0 items-center gap-2 rounded-[4px] border px-3.5 py-2 text-xs font-medium transition-colors ${
+                className={`inline-flex h-8.5 items-center justify-center rounded-[4px] border px-3 text-xs font-semibold whitespace-nowrap transition-colors sm:h-9 sm:px-4 ${
                   active
                     ? "border-[var(--brand-accent)] bg-[var(--brand-accent)] text-[#F6F5F2]"
                     : "border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:border-[var(--text-primary)]"
                 }`}
               >
-                <span>{tab.labelAr}</span>
-                {tab.key !== "ALL" && (
-                  <span
-                    dir="ltr"
-                    className={`font-en text-[10px] tracking-[0.14em] ${
-                      active ? "text-[#F6F5F2]/85" : "text-[var(--text-muted)]"
-                    }`}
-                  >
-                    {tab.labelEn}
-                  </span>
-                )}
+                {tab.labelAr}
               </button>
             );
           })}
         </div>
 
         {/* 4:5 Product Grid */}
-        <div className="mt-8 grid grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-6 lg:grid-cols-4">
+        <div className="mt-8 grid grid-cols-2 gap-x-3.5 gap-y-7 sm:gap-x-6 sm:gap-y-9 lg:grid-cols-4">
           {visibleProducts.map((product) => (
             <ProductCard
               key={product.id}
@@ -97,6 +78,17 @@ export function HomeFeaturedGallery({ products }: { products: Product[] }) {
               onInspect={(p) => setInspected(p)}
             />
           ))}
+        </div>
+
+        {/* Centered Symmetric View-All Action */}
+        <div className="mt-9 flex justify-center">
+          <Link
+            href="/shop"
+            className="inline-flex h-10 items-center justify-center gap-2 rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-6 text-xs font-semibold text-[var(--text-primary)] transition-colors hover:border-[var(--brand-accent)] hover:text-[var(--brand-accent)]"
+          >
+            <span>عرض الكتالوج الكامل ({available.length})</span>
+            <ArrowLeft className="size-3.5" strokeWidth={1.5} />
+          </Link>
         </div>
       </div>
 

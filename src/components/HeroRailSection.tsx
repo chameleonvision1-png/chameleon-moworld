@@ -176,26 +176,25 @@ export function HeroRailSection({ products }: { products: Product[] }) {
     <ClothingRailHero
       items={railItems}
       hanger="none"
-      eyebrow="FRONTIER FASHION HUB // WINTER RAIL EDIT"
-      heading="استاند العرض التفاعلي — اسحب القطعة وعاين التفاصيل عن قرب"
-      caption="تشكيلة الشتاء المختارة — ١٠ قطع معلّقة للمعاينة المباشرة"
+      eyebrow="MO WORLD // WINTER EDIT"
+      heading="تشكيلة الشتاء التفاعلية"
+      caption="١٠ قطع معلّقة للمعاينة المباشرة — اسحب أو اضغط للتفاصيل"
       autoplay
       interval={2900}
       action={
-        <div className="flex flex-wrap items-center justify-center gap-3">
+        <div className="grid w-full max-w-[320px] grid-cols-2 gap-2.5 sm:max-w-sm">
           <Link
             href="/shop"
-            className="inline-flex items-center gap-2 rounded-[4px] bg-[var(--brand-accent)] px-6 py-3 text-xs font-semibold text-[#F6F5F2] transition-colors hover:bg-[var(--brand-accent-hover)]"
+            className="inline-flex h-10 items-center justify-center gap-1.5 rounded-[4px] bg-[var(--brand-accent)] px-3 text-xs font-semibold text-[#F6F5F2] whitespace-nowrap transition-colors hover:bg-[var(--brand-accent-hover)]"
           >
-            <span>تصفح التشكيلة الكاملة</span>
-            <ArrowLeft className="size-4" strokeWidth={1.5} />
+            <span>تصفح الكتالوج</span>
+            <ArrowLeft className="size-3.5 shrink-0" strokeWidth={1.5} />
           </Link>
           <Link
             href="/shop?sub=MO+%2F+KIDS"
-            className="inline-flex items-center gap-2 rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-5 py-3 text-xs font-semibold text-[var(--text-primary)] transition-colors hover:border-[var(--text-primary)]"
+            className="inline-flex h-10 items-center justify-center rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-3 text-xs font-semibold text-[var(--text-primary)] whitespace-nowrap transition-colors hover:border-[var(--text-primary)]"
           >
-            <span dir="ltr" className="font-en tracking-wider">MO / KIDS</span>
-            <span>أزياء الأطفال</span>
+            <span>قسم الأطفال</span>
           </Link>
         </div>
       }

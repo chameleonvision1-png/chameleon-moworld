@@ -13,42 +13,42 @@ export default function AboutPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
       <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12">
-        <div className="lg:col-span-6">
-          <p dir="ltr" className="micro-label text-right text-[var(--brand-accent)]">
-            OUR STRATEGIC EVOLUTION
+        <div className="text-center lg:col-span-6 lg:text-right">
+          <p dir="ltr" className="micro-label text-[var(--brand-accent)]">
+            OUR EVOLUTION
           </p>
-          <h1 className="mt-2 text-2xl font-bold tracking-tight text-[var(--text-primary)] sm:text-4xl">
-            من MO Children&apos;s World إلى آفاق MO WORLD الرحبة
+          <h1 className="mt-2 text-2xl font-bold text-[var(--text-primary)] sm:text-4xl">
+            من أزياء الأطفال إلى دار أزياء عصرية متكاملة
           </h1>
           <p
             dir="ltr"
-            className="font-editorial mt-3 text-right text-2xl text-[var(--text-muted)] sm:text-3xl"
+            className="font-editorial mt-2 text-xl text-[var(--text-muted)] sm:text-3xl"
           >
             Frontier Fashion Hub — Built for Every Generation.
           </p>
 
-          <div className="mt-6 space-y-4 text-xs leading-relaxed text-[var(--text-muted)] sm:text-sm">
+          <div className="mt-5 space-y-3.5 text-xs leading-relaxed text-[var(--text-muted)] sm:text-sm">
             <p>
-              بدأت حكاية <strong className="text-[var(--text-primary)]">MO</strong> كمجتمع متخصص في ملابس الأطفال العصرية وأطقم الخروج المتناسقة التي تمنح الطفل راحة حقيقية وأناقة مختلفة بعيداً عن الرسومات المزدحمة التقليدية.
+              بدأت حكاية الدار كمجتمع متخصص في ملابس الأطفال العصرية وأطقم الخروج المتناسقة التي تمنح الطفل راحة حقيقية وأناقة هادئة بعيداً عن الرسومات المزدحمة التقليدية.
             </p>
             <p>
-              ومع نمو ثقة العائلات وطلب الشباب المستمر لنفس جودة القطن المصري الثقيل والقصّات الهادئة، تطورت العلامة استراتيجياً إلى <strong className="text-[var(--text-primary)]">MO WORLD — Frontier Fashion Hub</strong>: دار أزياء عصرية شاملة تحتفظ بملابس الأطفال كركيزة أساسية عبر خط <span dir="ltr" className="font-en font-semibold text-[var(--text-primary)]">MO / KIDS</span>، بالتوازي مع التوسع الكامل في خطوط الشباب واليونيسكس والجاكيتات الموسمية.
+              ومع نمو ثقة العائلات وطلب الشباب المستمر لنفس جودة القطن المصري الثقيل والقصّات الهادئة، تطورت العلامة استراتيجياً إلى دار أزياء شاملة تحتفظ بملابس الأطفال كركيزة أساسية، بالتوازي مع التوسع الكامل في خطوط الشباب واليونيسكس والجاكيتات الموسمية.
             </p>
           </div>
 
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mx-auto mt-7 grid max-w-[320px] grid-cols-2 gap-2.5 sm:max-w-sm lg:mx-0">
             <Link
               href="/shop"
-              className="inline-flex items-center gap-2 rounded-[4px] bg-[var(--brand-accent)] px-6 py-3 text-xs font-semibold text-[#F6F5F2] hover:bg-[var(--brand-accent-hover)]"
+              className="inline-flex h-10 items-center justify-center gap-1.5 rounded-[4px] bg-[var(--brand-accent)] px-3 text-xs font-semibold text-[#F6F5F2] whitespace-nowrap hover:bg-[var(--brand-accent-hover)]"
             >
-              <span>استكشف التشكيلة الحالية</span>
-              <ArrowLeft className="size-4" strokeWidth={1.5} />
+              <span>تصفح التشكيلة</span>
+              <ArrowLeft className="size-3.5 shrink-0" strokeWidth={1.5} />
             </Link>
             <Link
               href="/brand"
-              className="inline-flex items-center gap-2 rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-5 py-3 text-xs font-semibold text-[var(--text-primary)] hover:border-[var(--text-primary)]"
+              className="inline-flex h-10 items-center justify-center rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-3 text-xs font-semibold text-[var(--text-primary)] whitespace-nowrap hover:border-[var(--text-primary)]"
             >
-              <span>تفاصيل الهوية والتغليف</span>
+              <span>الهوية والتغليف</span>
             </Link>
           </div>
         </div>

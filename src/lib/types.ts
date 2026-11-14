@@ -129,6 +129,8 @@ export interface Settings {
   instagramUrl: string;
   facebookUrl: string;
   tiktokUrl: string;
+  whatsappGroupUrl?: string;
+  telegramUrl?: string;
   showroomNameAr: string;
   showroomAddressAr: string;
   workingHoursAr: string;

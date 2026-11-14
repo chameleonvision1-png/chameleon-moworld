@@ -52,12 +52,12 @@ export default function BrandAtelierPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
       {/* Header */}
-      <div className="border-b border-[var(--border-subtle)] pb-8">
-        <p dir="ltr" className="micro-label text-right text-[var(--brand-accent)]">
-          ATELIER &amp; DESIGN SYSTEM // CONCEPT 07
+      <div className="border-b border-[var(--border-subtle)] pb-8 text-center sm:text-right">
+        <p dir="ltr" className="micro-label text-[var(--brand-accent)]">
+          ATELIER // CONCEPT 07
         </p>
-        <h1 className="mt-2 text-2xl font-bold tracking-tight text-[var(--text-primary)] sm:text-4xl">
-          الهوية البصرية، الشعار المنحوت وتفاصيل التغليف
+        <h1 className="mt-2 text-2xl font-bold text-[var(--text-primary)] sm:text-3xl">
+          الهوية البصرية وتفاصيل التغليف
         </h1>
         <p className="mt-2 max-w-3xl text-xs leading-relaxed text-[var(--text-muted)] sm:text-sm">
           صُممت هوية MO WORLD لتجمع بين البساطة المعمارية السويسرية وبين علامة تايبوغرافية منحوتة بدقة فائقة (Sculptural Concept 07) تحافظ على ثباتها ووضوحها على الشاشات الرقمية والمنسوجات الفاخرة.

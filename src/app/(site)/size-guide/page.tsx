@@ -28,12 +28,12 @@ export default async function SizeGuidePage() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
-      <div className="border-b border-[var(--border-subtle)] pb-8">
-        <p dir="ltr" className="micro-label text-right text-[var(--brand-accent)]">
-          FIT ARCHITECTURE &amp; GARMENT CARE
+      <div className="border-b border-[var(--border-subtle)] pb-8 text-center sm:text-right">
+        <p dir="ltr" className="micro-label text-[var(--brand-accent)]">
+          FIT &amp; GARMENT CARE
         </p>
-        <h1 className="mt-2 text-2xl font-bold tracking-tight text-[var(--text-primary)] sm:text-4xl">
-          دليل المقاسات وتعليمات العناية بالخامات
+        <h1 className="mt-2 text-2xl font-bold text-[var(--text-primary)] sm:text-3xl">
+          دليل المقاسات وتعليمات العناية
         </h1>
         <p className="mt-2 max-w-2xl text-xs leading-relaxed text-[var(--text-muted)] sm:text-sm">
           جميع القياسات الموضحة أدناه مأخوذة بالسنتيمتر للقطعة مفرودة على سطح مستوٍ (عرض الصدر من الإبط للإبط). وتذكّر دائماً أنه متاح لك معاينة الأوردر مع المندوب قبل الاستلام أو الاستبدال خلال ١٤ يوماً.

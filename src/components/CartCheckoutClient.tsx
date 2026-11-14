@@ -83,19 +83,19 @@ export function CartCheckoutClient({ shippingZones, settings }: CartCheckoutClie
           <p className="mt-2 text-xs leading-relaxed text-[var(--text-muted)] sm:text-sm">
             اختر مقاسك المفضل من تشكيلات MO / KIDS أو ESSENTIALS أو STUDIO واستمتع بمعاينة كاملة للأوردر عند الاستلام.
           </p>
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
+          <div className="mx-auto mt-6 grid max-w-[320px] grid-cols-2 gap-2.5">
             <Link
               href="/shop"
-              className="inline-flex items-center gap-2 rounded-[4px] bg-[var(--brand-accent)] px-6 py-3 text-xs font-semibold text-[#F6F5F2] hover:bg-[var(--brand-accent-hover)]"
+              className="inline-flex h-10 items-center justify-center gap-1.5 rounded-[4px] bg-[var(--brand-accent)] px-3 text-xs font-semibold text-[#F6F5F2] whitespace-nowrap hover:bg-[var(--brand-accent-hover)]"
             >
               <span>تصفح التشكيلات</span>
-              <ArrowLeft className="size-4" strokeWidth={1.5} />
+              <ArrowLeft className="size-3.5 shrink-0" strokeWidth={1.5} />
             </Link>
             <Link
               href="/drops"
-              className="inline-flex items-center gap-2 rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-primary)] px-5 py-3 text-xs font-semibold text-[var(--text-primary)] hover:border-[var(--text-primary)]"
+              className="inline-flex h-10 items-center justify-center rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-primary)] px-3 text-xs font-semibold text-[var(--text-primary)] whitespace-nowrap hover:border-[var(--text-primary)]"
             >
-              <span>الكبسولات والباكدجات</span>
+              <span>الباكدجات</span>
             </Link>
           </div>
         </div>
@@ -107,9 +107,9 @@ export function CartCheckoutClient({ shippingZones, settings }: CartCheckoutClie
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
       <div className="border-b border-[var(--border-subtle)] pb-6">
         <p dir="ltr" className="micro-label text-right text-[var(--brand-accent)]">
-          SECURE CHECKOUT // CASH ON DELIVERY
+          SECURE CHECKOUT
         </p>
-        <h1 className="mt-2 text-2xl font-bold tracking-tight text-[var(--text-primary)] sm:text-3xl">
+        <h1 className="mt-2 text-2xl font-bold text-[var(--text-primary)] sm:text-3xl">
           مراجعة الحقيبة وإتمام الطلب
         </h1>
         <p className="mt-1 text-xs text-[var(--text-muted)] sm:text-sm">

@@ -6,6 +6,7 @@ import { ArrowLeft, CheckCircle2, MessageSquare, Package, ShieldCheck, Truck } f
 import { readDB } from "@/lib/db";
 import type { OrderStatus } from "@/lib/types";
 import { formatPrice } from "@/lib/utils";
+import { cleanPhone } from "@/lib/link-hub";
 import { buildOrderWhatsAppUrl } from "@/lib/whatsapp";
 
 export const metadata: Metadata = {
@@ -34,11 +35,14 @@ export default async function OrderTrackingPage({
 
   const shortRef = order.id.slice(-6).toUpperCase();
   const currentStepIdx = STATUS_STEPS.findIndex((s) => s.key === order.status);
-  const waConfirmUrl = buildOrderWhatsAppUrl(
-    db.settings.whatsapp,
-    order,
-    "https://moworld.chameleon.vision",
-  );
+  const validWhatsapp = cleanPhone(db.settings.whatsapp);
+  const waConfirmUrl = validWhatsapp
+    ? buildOrderWhatsAppUrl(
+        validWhatsapp,
+        order,
+        "https://moworld.chameleon.vision",
+      )
+    : null;
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
@@ -52,22 +56,26 @@ export default async function OrderTrackingPage({
               </span>
             </div>
             <h1 className="mt-1.5 text-xl font-bold text-[var(--text-primary)] sm:text-2xl">
-              شكراً لطلبك من MO WORLD، {order.customerName}
+              شكراً لطلبك، {order.customerName}
             </h1>
             <p className="mt-1 text-xs text-[var(--text-muted)]">
-              تم تسجيل طلبك بنجاح. يمكنك إرسال رسالة التأكيد المباشرة عبر واتساب لتسريع التجهيز.
+              {waConfirmUrl
+                ? "تم تسجيل طلبك بنجاح. يمكنك إرسال رسالة التأكيد المباشرة عبر واتساب لتسريع التجهيز."
+                : "تم تسجيل طلبك بنجاح وسيتم التواصل معك لتأكيد موعد التسليم."}
             </p>
           </div>
 
-          <a
-            href={waConfirmUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-[4px] bg-[var(--brand-accent)] px-5 py-3 text-xs font-semibold text-[#F6F5F2] transition-colors hover:bg-[var(--brand-accent-hover)]"
-          >
-            <MessageSquare className="size-4" strokeWidth={1.5} />
-            <span>تأكيد الطلب عبر واتساب</span>
-          </a>
+          {waConfirmUrl && (
+            <a
+              href={waConfirmUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex shrink-0 items-center justify-center gap-2 rounded-[4px] bg-[var(--brand-accent)] px-5 py-3 text-xs font-semibold text-[#F6F5F2] transition-colors hover:bg-[var(--brand-accent-hover)]"
+            >
+              <MessageSquare className="size-4" strokeWidth={1.5} />
+              <span>تأكيد الطلب عبر واتساب</span>
+            </a>
+          )}
         </div>
 
         {/* Status Tracker */}

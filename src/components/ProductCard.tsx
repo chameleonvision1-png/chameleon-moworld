@@ -79,13 +79,13 @@ export function ProductCard({ product, onInspect, compact = false }: ProductCard
         )}
 
         {/* Top badges */}
-        <div className="pointer-events-none absolute inset-x-2.5 top-2.5 flex items-start justify-between gap-1">
+        <div className="pointer-events-none absolute inset-x-2 top-2 flex items-start justify-between gap-1.5">
           {product.isNewDrop ? (
             <span
               dir="ltr"
-              className="rounded-[4px] bg-[var(--brand-accent)] px-2 py-0.5 font-en text-[9px] font-semibold tracking-[0.18em] text-[#F6F5F2]"
+              className="rounded-[3px] bg-[var(--brand-accent)] px-1.5 py-0.5 font-en text-[9px] font-semibold tracking-[0.14em] text-[#F6F5F2] whitespace-nowrap"
             >
-              NEW DROP
+              NEW
             </span>
           ) : (
             <span />
@@ -93,7 +93,7 @@ export function ProductCard({ product, onInspect, compact = false }: ProductCard
           {!compact && (
             <span
               dir="ltr"
-              className="rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-primary)]/85 px-1.5 py-0.5 font-en text-[9px] font-medium tracking-wider text-[var(--text-muted)]"
+              className="hidden rounded-[3px] border border-[var(--border-subtle)] bg-[var(--bg-primary)]/88 px-1.5 py-0.5 font-en text-[9px] font-medium tracking-wider text-[var(--text-muted)] whitespace-nowrap sm:inline-block"
             >
               {product.code}
             </span>

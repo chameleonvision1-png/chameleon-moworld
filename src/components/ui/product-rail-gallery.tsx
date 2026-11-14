@@ -1095,7 +1095,7 @@ export function ClothingRailHero({
             </p>
           )}
           {heading && (
-            <h1 className="text-balance text-2xl font-semibold tracking-tight text-[var(--text-primary)] sm:text-4xl">
+            <h1 className="text-balance text-xl font-bold text-[var(--text-primary)] sm:text-3xl">
               {heading}
             </h1>
           )}
@@ -1585,7 +1585,7 @@ function Detail({
               </span>
             )}
           </div>
-          <h3 id={titleId} className="text-xl font-semibold tracking-tight text-[var(--text-primary)] sm:text-2xl">
+          <h3 id={titleId} className="text-xl font-semibold text-[var(--text-primary)] sm:text-2xl">
             {item.name}
           </h3>
           {item.nameEn && (

@@ -1408,7 +1408,7 @@ export function AdminDashboard({
               </label>
 
               <label className="flex flex-col gap-1 text-xs sm:col-span-2">
-                <span className="font-semibold">عنوان صالة العرض</span>
+                <span className="font-semibold">عنوان صالة العرض (اتركه فارغاً للمتجر الإلكتروني فقط)</span>
                 <input
                   type="text"
                   value={settings.showroomAddressAr}
@@ -1418,6 +1418,74 @@ export function AdminDashboard({
                   className="h-10 rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-primary)] px-3 text-xs"
                 />
               </label>
+
+              <div className="rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-primary)] p-4 sm:col-span-2">
+                <p className="text-xs font-bold text-[var(--text-primary)]">
+                  مركز الروابط (Link Hub) — السوشيال ميديا والجروبات الرسمية
+                </p>
+                <p className="mt-0.5 text-[11px] text-[var(--text-muted)]">
+                  اترك أي رابط فارغاً ليظهر كـ &quot;قريباً&quot; في القائمة الجانبية وصفحة /links حتى يصبح جاهزاً.
+                </p>
+                <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <label className="flex flex-col gap-1 text-xs">
+                    <span className="font-semibold">رابط Instagram</span>
+                    <input
+                      type="url"
+                      dir="ltr"
+                      placeholder="https://instagram.com/..."
+                      value={settings.instagramUrl || ""}
+                      onChange={(e) => setSettings({ ...settings, instagramUrl: e.target.value })}
+                      className="h-9 rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-3 font-en text-xs"
+                    />
+                  </label>
+                  <label className="flex flex-col gap-1 text-xs">
+                    <span className="font-semibold">رابط TikTok</span>
+                    <input
+                      type="url"
+                      dir="ltr"
+                      placeholder="https://tiktok.com/@..."
+                      value={settings.tiktokUrl || ""}
+                      onChange={(e) => setSettings({ ...settings, tiktokUrl: e.target.value })}
+                      className="h-9 rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-3 font-en text-xs"
+                    />
+                  </label>
+                  <label className="flex flex-col gap-1 text-xs">
+                    <span className="font-semibold">رابط Facebook</span>
+                    <input
+                      type="url"
+                      dir="ltr"
+                      placeholder="https://facebook.com/..."
+                      value={settings.facebookUrl || ""}
+                      onChange={(e) => setSettings({ ...settings, facebookUrl: e.target.value })}
+                      className="h-9 rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-3 font-en text-xs"
+                    />
+                  </label>
+                  <label className="flex flex-col gap-1 text-xs">
+                    <span className="font-semibold">رابط جروب / مجتمع الواتساب</span>
+                    <input
+                      type="url"
+                      dir="ltr"
+                      placeholder="https://chat.whatsapp.com/..."
+                      value={settings.whatsappGroupUrl || ""}
+                      onChange={(e) =>
+                        setSettings({ ...settings, whatsappGroupUrl: e.target.value })
+                      }
+                      className="h-9 rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-3 font-en text-xs"
+                    />
+                  </label>
+                  <label className="flex flex-col gap-1 text-xs sm:col-span-2">
+                    <span className="font-semibold">رابط قناة تيليجرام (اختياري)</span>
+                    <input
+                      type="url"
+                      dir="ltr"
+                      placeholder="https://t.me/..."
+                      value={settings.telegramUrl || ""}
+                      onChange={(e) => setSettings({ ...settings, telegramUrl: e.target.value })}
+                      className="h-9 rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-3 font-en text-xs"
+                    />
+                  </label>
+                </div>
+              </div>
 
               <label className="flex flex-col gap-1 text-xs sm:col-span-2">
                 <span className="font-semibold">شريط الإعلان العلوي</span>

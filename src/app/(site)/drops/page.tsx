@@ -17,12 +17,12 @@ export default async function DropsPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
       <div className="border-b border-[var(--border-subtle)] pb-8">
-        <p dir="ltr" className="micro-label text-right text-[var(--brand-accent)]">
-          SEASONAL CAPSULES &amp; BUNDLES
+        <p dir="ltr" className="micro-label text-center text-[var(--brand-accent)] sm:text-right">
+          CAPSULES &amp; BUNDLES
         </p>
-        <div className="mt-2 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+        <div className="mt-2 flex flex-col items-center justify-between gap-4 text-center sm:flex-row sm:items-end sm:text-right">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-[var(--text-primary)] sm:text-4xl">
+            <h1 className="text-2xl font-bold text-[var(--text-primary)] sm:text-3xl">
               الكبسولات والأطقم المجمعة
             </h1>
             <p className="mt-2 max-w-2xl text-xs leading-relaxed text-[var(--text-muted)] sm:text-sm">

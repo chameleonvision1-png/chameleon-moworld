@@ -102,12 +102,12 @@ export function ShopCatalogClient({
         </p>
         <div className="mt-2 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-[var(--text-primary)] sm:text-3xl">
+            <h1 className="text-2xl font-bold text-[var(--text-primary)] sm:text-3xl">
               {activeCategoryMeta
                 ? activeCategoryMeta.nameAr
                 : selectedSub === "NEW"
                   ? "أحدث الإصدارات الشتوية"
-                  : "جميع تشكيلات MO WORLD"}
+                  : "جميع تشكيلات الدار"}
             </h1>
             <p className="mt-1 max-w-2xl text-xs text-[var(--text-muted)] sm:text-sm">
               {activeCategoryMeta

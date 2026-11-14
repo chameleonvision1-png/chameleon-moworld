@@ -94,16 +94,65 @@ async function writeSupabaseDB(db: DB): Promise<void> {
   }
 }
 
+const LEGACY_CATEGORY_TITLES: Record<string, { nameAr: string; descriptionAr: string }> = {
+  "ملابس الأطفال والأطقم": {
+    nameAr: "أزياء الأطفال",
+    descriptionAr: "أطقم فليس ثقيلة ٤٠٠ جرام وقصّات كارجو عملية للأطفال.",
+  },
+  "الأساسيات اليومية الثقيلة": {
+    nameAr: "الأساسيات الثقيلة",
+    descriptionAr: "قطع يومية أحادية اللون من القطن المصري فائق الكثافة.",
+  },
+  "إصدارات الاستوديو والجاكيتات": {
+    nameAr: "إصدارات الاستوديو",
+    descriptionAr: "كبسولات موسمية تشمل الجاكيتات المعمارية والمعاطف.",
+  },
+  "إصدارات الأرشيف المحدودة": {
+    nameAr: "إصدارات الأرشيف",
+    descriptionAr: "قطع تجريبية محدودة الإصدار بطبعات الدار المنحوتة.",
+  },
+};
+
+function sanitizeLegacySeed(db: DB): DB {
+  const s = db.settings;
+  if (s.phone === "01024885590") s.phone = "";
+  if (s.whatsapp === "201024885590") s.whatsapp = "";
+  if (s.instagramUrl === "https://instagram.com") s.instagramUrl = "";
+  if (s.facebookUrl === "https://facebook.com") s.facebookUrl = "";
+  if (s.tiktokUrl === "https://tiktok.com") s.tiktokUrl = "";
+  if (s.showroomAddressAr === "القاهرة الجديدة — التجمع الخامس، شارع التسعين الشمالي") {
+    s.showroomAddressAr = "";
+  }
+  if (s.showroomNameAr === "MO WORLD — صالة العرض الرئيسية") {
+    s.showroomNameAr = "المتجر الإلكتروني الرسمي";
+  }
+  if (s.workingHoursAr === "يومياً من ١٢ ظهراً حتى ١١ مساءً") {
+    s.workingHoursAr = "الطلب أونلاين متاح ٢٤ ساعة — توصيل لجميع المحافظات";
+  }
+  if (s.announcementAr?.startsWith("WINTER DROP // MO WORLD")) {
+    s.announcementAr = "شحن مجاني للطلبات فوق ٢٬٥٠٠ ج.م • معاينة عند الاستلام";
+  }
+  for (const cat of db.categories) {
+    const mapped = LEGACY_CATEGORY_TITLES[cat.nameAr];
+    if (mapped) {
+      cat.nameAr = mapped.nameAr;
+      cat.descriptionAr = mapped.descriptionAr;
+    }
+  }
+  return db;
+}
+
 export async function readDB(forceFresh = false): Promise<DB> {
   if (!forceFresh && memoryCache && Date.now() - memoryCache.ts < CACHE_TTL_MS) {
     return structuredClone(memoryCache.db);
   }
   const remote = await readSupabaseDB();
   if (remote) {
+    sanitizeLegacySeed(remote);
     memoryCache = { db: remote, ts: Date.now() };
     return structuredClone(remote);
   }
-  const local = readLocalDB();
+  const local = sanitizeLegacySeed(readLocalDB());
   memoryCache = { db: local, ts: Date.now() };
   return local;
 }
