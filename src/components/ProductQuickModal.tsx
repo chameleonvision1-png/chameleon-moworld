@@ -2,7 +2,8 @@
 "use client";
 
 import * as React from "react";
-import { Check, Ruler, ShieldCheck, ShoppingBag, Truck, X } from "lucide-react";
+import Link from "next/link";
+import { ArrowLeft, Check, Ruler, ShieldCheck, ShoppingBag, Truck, X } from "lucide-react";
 import type { Product } from "@/lib/types";
 import { useLockBodyScroll } from "@/lib/useLockBodyScroll";
 import { formatPrice } from "@/lib/utils";
@@ -28,7 +29,7 @@ export function ProductQuickModal({
   const [sizeIdx, setSizeIdx] = React.useState(1);
   const [viewFace, setViewFace] = React.useState<"front" | "back">("front");
   const [fitOpen, setFitOpen] = React.useState(false);
-  const [heightCm, setHeightCm] = React.useState("174");
+  const [heightCm, setHeightCm] = React.useState("126");
   const [weightKg, setWeightKg] = React.useState("72");
   const [addedFlash, setAddedFlash] = React.useState(false);
 
@@ -40,10 +41,13 @@ export function ProductQuickModal({
     setSizeIdx(Math.min(1, (product?.sizes.length ?? 1) - 1));
     setViewFace("front");
     setFitOpen(false);
+    const firstLabel = product?.sizes[0]?.label ?? "";
+    setHeightCm(firstLabel === "2" ? "98" : product?.ageGroup === "kids" ? "128" : "174");
   }
 
   if (!product) return null;
 
+  const isComingSoon = Boolean(product.comingSoon);
   const activeColor = product.colors[colorIdx] ?? product.colors[0];
   const activeSize = product.sizes[sizeIdx] ?? product.sizes[0];
   const displayImg =
@@ -54,11 +58,24 @@ export function ProductQuickModal({
   const recommendedSize = (() => {
     const h = Number(heightCm) || 0;
     const w = Number(weightKg) || 0;
+    const labels = product.sizes.map((s) => s.label);
     if (product.ageGroup === "kids") {
-      if (h <= 112) return "4-5Y";
-      if (h <= 125) return "6-7Y";
-      if (h <= 138) return "8-9Y";
-      return "10-12Y";
+      if (labels.includes("2")) {
+        if (h <= 94) return "2";
+        if (h <= 100) return "3";
+        if (h <= 106) return "4";
+        return "5";
+      }
+      if (labels.includes("6")) {
+        if (h <= 120) return "6";
+        if (h <= 132) return "8";
+        if (h <= 144) return "10";
+        return "12";
+      }
+      if (h <= 112) return labels[0] ?? "6";
+      if (h <= 125) return labels[1] ?? "8";
+      if (h <= 138) return labels[2] ?? "10";
+      return labels[labels.length - 1] ?? "12";
     }
     if (w < 64 && h < 173) return "S";
     if (w < 78 && h < 181) return "M";
@@ -71,7 +88,7 @@ export function ProductQuickModal({
     .filter((p): p is Product => Boolean(p));
 
   const handleAdd = () => {
-    if (!activeColor || !activeSize) return;
+    if (!activeColor || !activeSize || isComingSoon) return;
     addItem(
       {
         productId: product.id,
@@ -129,7 +146,7 @@ export function ProductQuickModal({
               <img
                 src={displayImg}
                 alt={product.nameAr}
-                className="size-full object-contain"
+                className={`size-full object-contain ${isComingSoon ? "opacity-80" : ""}`}
               />
               <span
                 dir="ltr"
@@ -137,6 +154,19 @@ export function ProductQuickModal({
               >
                 {product.code}
               </span>
+
+              {isComingSoon && (
+                <div className="pointer-events-none absolute inset-x-6 top-1/2 -translate-y-1/2">
+                  <div className="mx-auto max-w-xs rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-primary)]/94 px-4 py-3.5 text-center shadow-lg backdrop-blur-sm">
+                    <p dir="ltr" className="font-en text-xs font-bold tracking-[0.22em] text-[var(--text-primary)]">
+                      COMING SOON
+                    </p>
+                    <p className="mt-1 text-xs font-medium text-[var(--text-muted)]">
+                      قطعة عرض مسبقة — غير متاحة للطلب حالياً
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
 
             {activeColor?.backImage && (
@@ -187,16 +217,18 @@ export function ProductQuickModal({
                 {product.nameEn}
               </p>
 
-              <div className="mt-3 flex items-baseline gap-3">
-                <span className="text-xl font-bold text-[var(--text-primary)]">
-                  {formatPrice(product.price)}
-                </span>
-                {product.oldPrice && product.oldPrice > product.price && (
-                  <span className="text-sm text-[var(--text-muted)] line-through">
-                    {formatPrice(product.oldPrice)}
+              {!isComingSoon && (
+                <div className="mt-3 flex items-baseline gap-3">
+                  <span className="text-xl font-bold text-[var(--text-primary)]">
+                    {formatPrice(product.price)}
                   </span>
-                )}
-              </div>
+                  {product.oldPrice && product.oldPrice > product.price && (
+                    <span className="text-sm text-[var(--text-muted)] line-through">
+                      {formatPrice(product.oldPrice)}
+                    </span>
+                  )}
+                </div>
+              )}
 
               <p className="mt-3 text-xs leading-relaxed text-[var(--text-muted)]">
                 {product.descriptionAr}
@@ -236,120 +268,146 @@ export function ProductQuickModal({
                 </div>
               </div>
 
-              {/* Size Selector + Smart Fit Finder */}
-              <div className="mt-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-[var(--text-primary)]">
-                    المقاس المطلوب
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => setFitOpen((v) => !v)}
-                    className="inline-flex items-center gap-1 text-xs font-medium text-[var(--brand-accent)] hover:underline"
-                  >
-                    <Ruler className="size-3.5" strokeWidth={1.5} />
-                    <span>اعرف مقاسك بالسم</span>
-                  </button>
-                </div>
-
-                <div className="mt-2 grid grid-cols-4 gap-2">
-                  {product.sizes.map((s, idx) => {
-                    const out = s.stock <= 0;
-                    return (
-                      <button
-                        key={s.id}
-                        type="button"
-                        disabled={out}
-                        onClick={() => setSizeIdx(idx)}
-                        className={`rounded-[4px] border py-2 font-en text-xs font-semibold transition-colors ${
-                          out
-                            ? "cursor-not-allowed border-[var(--border-subtle)] opacity-40 line-through"
-                            : sizeIdx === idx
-                              ? "border-[var(--brand-accent)] bg-[var(--brand-accent)] text-[#F6F5F2]"
-                              : "border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:border-[var(--text-primary)]"
-                        }`}
-                      >
-                        {s.label}
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {activeSize && (activeSize.chestCm || activeSize.ageHint) && (
-                  <p className="mt-1.5 text-[11px] text-[var(--text-muted)]">
-                    قياسات مقاس <span className="font-en font-semibold text-[var(--text-primary)]">{activeSize.label}</span>:{" "}
-                    {activeSize.chestCm ? `عرض الصدر ${activeSize.chestCm} سم` : ""}{" "}
-                    {activeSize.lengthCm ? `• الطول ${activeSize.lengthCm} سم` : ""}{" "}
-                    {activeSize.ageHint ? `(${activeSize.ageHint})` : ""}
+              {isComingSoon ? (
+                /* Floating Lock Board inside Modal for Youth Preview Items */
+                <div className="mt-5 rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-5 text-center">
+                  <p dir="ltr" className="font-en text-xs font-bold tracking-[0.22em] text-[var(--brand-accent)]">
+                    OPENING SOON // {product.subBrand}
                   </p>
-                )}
+                  <p className="mt-1.5 text-sm font-bold text-[var(--text-primary)]">
+                    هذا القسم يُفتتح قريباً
+                  </p>
+                  <p className="mt-1 text-xs leading-relaxed text-[var(--text-muted)]">
+                    خطوط الشباب والأساسيات معروضة للمعاينة فقط حالياً وغير متاحة للشراء — يمكنك الطلب الفوري من قسم أزياء الأطفال المفتوح الآن.
+                  </p>
+                </div>
+              ) : (
+                /* Size Selector + Smart Fit Finder */
+                <div className="mt-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold text-[var(--text-primary)]">
+                      المقاس المطلوب
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setFitOpen((v) => !v)}
+                      className="inline-flex items-center gap-1 text-xs font-medium text-[var(--brand-accent)] hover:underline"
+                    >
+                      <Ruler className="size-3.5" strokeWidth={1.5} />
+                      <span>اعرف مقاسك بالسم</span>
+                    </button>
+                  </div>
 
-                {fitOpen && (
-                  <div className="mt-3 rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-3 text-xs">
-                    <p className="font-semibold text-[var(--text-primary)]">
-                      حاسبة المقاس السريعة ({product.ageGroup === "kids" ? "حسب طول الطفل" : "الطول والوزن"})
+                  <div className="mt-2 grid grid-cols-4 gap-2">
+                    {product.sizes.map((s, idx) => {
+                      const out = s.stock <= 0;
+                      return (
+                        <button
+                          key={s.id}
+                          type="button"
+                          disabled={out}
+                          onClick={() => setSizeIdx(idx)}
+                          className={`rounded-[4px] border py-2 font-en text-xs font-semibold transition-colors ${
+                            out
+                              ? "cursor-not-allowed border-[var(--border-subtle)] opacity-40 line-through"
+                              : sizeIdx === idx
+                                ? "border-[var(--brand-accent)] bg-[var(--brand-accent)] text-[#F6F5F2]"
+                                : "border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:border-[var(--text-primary)]"
+                          }`}
+                        >
+                          {s.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {activeSize && (activeSize.chestCm || activeSize.ageHint) && (
+                    <p className="mt-1.5 text-[11px] text-[var(--text-muted)]">
+                      قياسات مقاس <span className="font-en font-semibold text-[var(--text-primary)]">{activeSize.label}</span>:{" "}
+                      {activeSize.chestCm ? `عرض الصدر ${activeSize.chestCm} سم` : ""}{" "}
+                      {activeSize.lengthCm ? `• الطول ${activeSize.lengthCm} سم` : ""}{" "}
+                      {activeSize.ageHint ? `(${activeSize.ageHint})` : ""}
                     </p>
-                    <div className="mt-2 grid grid-cols-2 gap-2">
-                      <label className="flex flex-col gap-1">
-                        <span className="text-[11px] text-[var(--text-muted)]">الطول (سم)</span>
-                        <input
-                          type="number"
-                          value={heightCm}
-                          onChange={(e) => setHeightCm(e.target.value)}
-                          className="rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-primary)] px-2.5 py-1.5 font-en text-xs text-[var(--text-primary)] outline-none focus:border-[var(--brand-accent)]"
-                        />
-                      </label>
-                      {product.ageGroup !== "kids" && (
+                  )}
+
+                  {fitOpen && (
+                    <div className="mt-3 rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-3 text-xs">
+                      <p className="font-semibold text-[var(--text-primary)]">
+                        حاسبة المقاس السريعة ({product.ageGroup === "kids" ? "حسب طول الطفل" : "الطول والوزن"})
+                      </p>
+                      <div className="mt-2 grid grid-cols-2 gap-2">
                         <label className="flex flex-col gap-1">
-                          <span className="text-[11px] text-[var(--text-muted)]">الوزن (كجم)</span>
+                          <span className="text-[11px] text-[var(--text-muted)]">الطول (سم)</span>
                           <input
                             type="number"
-                            value={weightKg}
-                            onChange={(e) => setWeightKg(e.target.value)}
+                            value={heightCm}
+                            onChange={(e) => setHeightCm(e.target.value)}
                             className="rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-primary)] px-2.5 py-1.5 font-en text-xs text-[var(--text-primary)] outline-none focus:border-[var(--brand-accent)]"
                           />
                         </label>
-                      )}
+                        {product.ageGroup !== "kids" && (
+                          <label className="flex flex-col gap-1">
+                            <span className="text-[11px] text-[var(--text-muted)]">الوزن (كجم)</span>
+                            <input
+                              type="number"
+                              value={weightKg}
+                              onChange={(e) => setWeightKg(e.target.value)}
+                              className="rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-primary)] px-2.5 py-1.5 font-en text-xs text-[var(--text-primary)] outline-none focus:border-[var(--brand-accent)]"
+                            />
+                          </label>
+                        )}
+                      </div>
+                      <div className="mt-2 flex items-center justify-between pt-1">
+                        <span className="text-[var(--text-muted)]">
+                          المقاس المقترح:{" "}
+                          <strong className="font-en text-[var(--brand-accent)]">{recommendedSize}</strong>
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const found = product.sizes.findIndex((s) => s.label === recommendedSize);
+                            if (found >= 0) setSizeIdx(found);
+                          }}
+                          className="rounded-[4px] border border-[var(--brand-accent)] px-2 py-1 text-[11px] font-semibold text-[var(--brand-accent)] hover:bg-[var(--brand-accent)] hover:text-[#F6F5F2]"
+                        >
+                          اختيار {recommendedSize}
+                        </button>
+                      </div>
                     </div>
-                    <div className="mt-2 flex items-center justify-between pt-1">
-                      <span className="text-[var(--text-muted)]">
-                        المقاس المقترح لقصّة {product.fitType}:{" "}
-                        <strong className="font-en text-[var(--brand-accent)]">{recommendedSize}</strong>
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const found = product.sizes.findIndex((s) => s.label === recommendedSize);
-                          if (found >= 0) setSizeIdx(found);
-                        }}
-                        className="rounded-[4px] border border-[var(--brand-accent)] px-2 py-1 text-[11px] font-semibold text-[var(--brand-accent)] hover:bg-[var(--brand-accent)] hover:text-[#F6F5F2]"
-                      >
-                        اختيار {recommendedSize}
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
+                  )}
+                </div>
+              )}
             </div>
 
             <div className="mt-6 space-y-3">
-              <button
-                type="button"
-                onClick={handleAdd}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-[4px] bg-[var(--brand-accent)] px-5 py-3.5 text-xs font-semibold text-[#F6F5F2] transition-colors hover:bg-[var(--brand-accent-hover)]"
-              >
-                {addedFlash ? (
-                  <>
-                    <Check className="size-4" strokeWidth={1.5} />
-                    <span>تمت الإضافة إلى الحقيبة</span>
-                  </>
-                ) : (
-                  <>
-                    <ShoppingBag className="size-4" strokeWidth={1.5} />
-                    <span>أضف إلى الحقيبة — {formatPrice(product.price)}</span>
-                  </>
-                )}
-              </button>
+              {isComingSoon ? (
+                <Link
+                  href="/shop?sub=MO+%2F+KIDS"
+                  onClick={onClose}
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-[4px] bg-[var(--brand-accent)] px-5 py-3.5 text-xs font-semibold text-[#F6F5F2] transition-colors hover:bg-[var(--brand-accent-hover)]"
+                >
+                  <span>تصفح تشكيلة الأطفال المتاحة الآن</span>
+                  <ArrowLeft className="size-4" strokeWidth={1.5} />
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleAdd}
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-[4px] bg-[var(--brand-accent)] px-5 py-3.5 text-xs font-semibold text-[#F6F5F2] transition-colors hover:bg-[var(--brand-accent-hover)]"
+                >
+                  {addedFlash ? (
+                    <>
+                      <Check className="size-4" strokeWidth={1.5} />
+                      <span>تمت الإضافة إلى الحقيبة</span>
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingBag className="size-4" strokeWidth={1.5} />
+                      <span>أضف إلى الحقيبة — {formatPrice(product.price)}</span>
+                    </>
+                  )}
+                </button>
+              )}
 
               <div className="grid grid-cols-2 gap-2 text-[11px] text-[var(--text-muted)]">
                 <div className="flex items-center gap-1.5 rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-2.5 py-2">
@@ -365,7 +423,7 @@ export function ProductQuickModal({
               {related.length > 0 && onSelectProduct && (
                 <div className="border-t border-[var(--border-subtle)] pt-3">
                   <p className="text-[11px] font-semibold text-[var(--text-primary)]">
-                    كمّل الإطلالة (Complete the Fit)
+                    أطقم أطفال مقترحة
                   </p>
                   <div className="mt-2 grid grid-cols-2 gap-2">
                     {related.slice(0, 2).map((rel) => (
@@ -378,14 +436,14 @@ export function ProductQuickModal({
                         <img
                           src={rel.colors[0]?.frontImage}
                           alt={rel.nameAr}
-                          className="aspect-[4/5] w-10 shrink-0 rounded-[2px] object-cover"
+                          className="aspect-[4/5] w-10 shrink-0 rounded-[2px] object-contain"
                         />
                         <div className="min-w-0">
                           <p className="truncate text-[11px] font-semibold text-[var(--text-primary)]">
                             {rel.nameAr}
                           </p>
                           <p className="text-[10px] text-[var(--brand-accent)]">
-                            {formatPrice(rel.price)}
+                            {rel.comingSoon ? "قريباً" : formatPrice(rel.price)}
                           </p>
                         </div>
                       </button>

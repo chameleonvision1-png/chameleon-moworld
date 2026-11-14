@@ -21,6 +21,7 @@ export async function POST(req: Request) {
       startsAt: body.startsAt || new Date(Date.now() - 86400_000).toISOString(),
       endsAt: body.endsAt || new Date(Date.now() + 90 * 86400_000).toISOString(),
       isActive: body.isActive !== false,
+      comingSoon: Boolean(body.comingSoon),
       includedProductIds: Array.isArray(body.includedProductIds) ? body.includedProductIds : [],
     };
     const idx = db.drops.findIndex((x) => x.id === d.id);

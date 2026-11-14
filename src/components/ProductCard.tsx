@@ -19,11 +19,12 @@ export function ProductCard({ product, onInspect, compact = false }: ProductCard
   const [quickSizesOpen, setQuickSizesOpen] = React.useState(false);
   const [justAdded, setJustAdded] = React.useState<string | null>(null);
 
+  const isComingSoon = Boolean(product.comingSoon);
   const color = product.colors[colorIdx] ?? product.colors[0];
 
   const handleQuickSize = (e: React.MouseEvent, sizeLabel: string) => {
     e.stopPropagation();
-    if (!color) return;
+    if (!color || isComingSoon) return;
     addItem(
       {
         productId: product.id,
@@ -66,21 +67,30 @@ export function ProductCard({ product, onInspect, compact = false }: ProductCard
           alt={product.nameAr}
           loading="lazy"
           className={`size-full object-contain transition-opacity duration-300 ${
-            color?.backImage ? "group-hover:opacity-0" : ""
-          }`}
+            isComingSoon ? "opacity-75" : ""
+          } ${color?.backImage ? "group-hover:opacity-0" : ""}`}
         />
         {color?.backImage && (
           <img
             src={color.backImage}
             alt={`${product.nameAr} — الظهر`}
             loading="lazy"
-            className="pointer-events-none absolute inset-0 size-full object-contain opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            className={`pointer-events-none absolute inset-0 size-full object-contain opacity-0 transition-opacity duration-300 ${
+              isComingSoon ? "group-hover:opacity-75" : "group-hover:opacity-100"
+            }`}
           />
         )}
 
         {/* Top badges */}
         <div className="pointer-events-none absolute inset-x-2 top-2 flex items-start justify-between gap-1.5">
-          {product.isNewDrop ? (
+          {isComingSoon ? (
+            <span
+              dir="ltr"
+              className="rounded-[3px] border border-[var(--border-subtle)] bg-[var(--bg-primary)]/92 px-2 py-0.5 font-en text-[9px] font-bold tracking-[0.16em] text-[var(--text-primary)] whitespace-nowrap"
+            >
+              COMING SOON
+            </span>
+          ) : product.isNewDrop ? (
             <span
               dir="ltr"
               className="rounded-[3px] bg-[var(--brand-accent)] px-1.5 py-0.5 font-en text-[9px] font-semibold tracking-[0.14em] text-[#F6F5F2] whitespace-nowrap"
@@ -100,8 +110,25 @@ export function ProductCard({ product, onInspect, compact = false }: ProductCard
           )}
         </div>
 
-        {/* Zara-style Quick-Add (+) Size Bar */}
-        {!compact && (
+        {/* Floating Coming Soon Plaque on Youth Preview Garments */}
+        {isComingSoon && (
+          <div className="pointer-events-none absolute inset-x-3 top-1/2 z-10 -translate-y-1/2">
+            <div className="mx-auto max-w-[190px] rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-primary)]/92 px-3 py-2.5 text-center shadow-md backdrop-blur-xs">
+              <p
+                dir="ltr"
+                className="font-en text-[10px] font-bold tracking-[0.2em] text-[var(--text-primary)] sm:text-[11px]"
+              >
+                COMING SOON
+              </p>
+              <p className="mt-0.5 text-[10px] font-medium text-[var(--text-muted)]">
+                يُفتتح قريباً — للمعاينة فقط
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Zara-style Quick-Add (+) Size Bar — Active ONLY on purchasable Kids items */}
+        {!compact && !isComingSoon && (
           <div
             onClick={(e) => e.stopPropagation()}
             className="absolute inset-x-2 bottom-2 z-10"
@@ -163,9 +190,15 @@ export function ProductCard({ product, onInspect, compact = false }: ProductCard
             <span className="line-clamp-1">{product.nameAr}</span>
           </button>
           <div className="shrink-0 text-left">
-            <span className="text-xs font-semibold text-[var(--text-primary)] sm:text-[13px]">
-              {formatPrice(product.price)}
-            </span>
+            {isComingSoon ? (
+              <span className="rounded-[3px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-1.5 py-0.5 text-[10px] font-semibold text-[var(--text-muted)]">
+                قريباً
+              </span>
+            ) : (
+              <span className="text-xs font-semibold text-[var(--text-primary)] sm:text-[13px]">
+                {formatPrice(product.price)}
+              </span>
+            )}
           </div>
         </div>
 

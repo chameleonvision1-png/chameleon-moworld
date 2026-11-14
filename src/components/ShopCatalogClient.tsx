@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Grid2X2, LayoutGrid, Rows2, Search, X } from "lucide-react";
 import type { Category, Product, SubBrand } from "@/lib/types";
+import { OpeningSoonBoard } from "./OpeningSoonBoard";
 import { ProductCard } from "./ProductCard";
 import { ProductQuickModal } from "./ProductQuickModal";
 
@@ -62,25 +63,29 @@ export function ShopCatalogClient({
 
   const filtered = React.useMemo(() => {
     const q = query.trim().toLowerCase();
-    return available.filter((p) => {
-      if (selectedSub === "NEW" && !p.isNewDrop) return false;
-      if (selectedSub !== "ALL" && selectedSub !== "NEW" && p.subBrand !== selectedSub) {
-        return false;
-      }
-      if (ageFilter === "kids" && p.ageGroup !== "kids") return false;
-      if (ageFilter === "adult" && p.ageGroup === "kids") return false;
-      if (ageFilter === "oversized" && p.fitType !== "Oversized" && p.fitType !== "Boxy") {
-        return false;
-      }
-      if (q) {
-        const hay = `${p.nameAr} ${p.nameEn} ${p.code} ${p.subBrand} ${p.fabricSpec}`.toLowerCase();
-        if (!hay.includes(q)) return false;
-      }
-      return true;
-    });
+    return available
+      .filter((p) => {
+        if (selectedSub === "NEW" && !p.isNewDrop) return false;
+        if (selectedSub !== "ALL" && selectedSub !== "NEW" && p.subBrand !== selectedSub) {
+          return false;
+        }
+        if (ageFilter === "kids" && p.ageGroup !== "kids") return false;
+        if (ageFilter === "adult" && p.ageGroup === "kids") return false;
+        if (ageFilter === "oversized" && p.fitType !== "Oversized" && p.fitType !== "Boxy") {
+          return false;
+        }
+        if (q) {
+          const hay = `${p.nameAr} ${p.nameEn} ${p.code} ${p.subBrand} ${p.fabricSpec}`.toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      })
+      .sort((a, b) => Number(Boolean(a.comingSoon)) - Number(Boolean(b.comingSoon)));
   }, [available, selectedSub, ageFilter, query]);
 
   const activeCategoryMeta = categories.find((c) => c.subBrand === selectedSub);
+  const isSectionOpeningSoon =
+    Boolean(activeCategoryMeta?.openingSoon) || ageFilter === "adult";
 
   const gridClasses =
     gridDensity === "editorial"
@@ -95,10 +100,12 @@ export function ShopCatalogClient({
       <div className="border-b border-[var(--border-subtle)] pb-6">
         <p dir="ltr" className="micro-label text-right text-[var(--brand-accent)]">
           {selectedSub === "ALL"
-            ? "MO WORLD // FULL ARCHIVE & SEASONAL CATALOG"
+            ? "MO WORLD // KIDS OPEN NOW • YOUTH OPENING SOON"
             : selectedSub === "NEW"
-              ? "MO WORLD // NEW DROPS"
-              : selectedSub}
+              ? "MO / KIDS // NEW WINTER SETS"
+              : isSectionOpeningSoon
+                ? `${selectedSub} // OPENING SOON`
+                : `${selectedSub} // OPEN NOW`}
         </p>
         <div className="mt-2 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
           <div>
@@ -106,13 +113,13 @@ export function ShopCatalogClient({
               {activeCategoryMeta
                 ? activeCategoryMeta.nameAr
                 : selectedSub === "NEW"
-                  ? "أحدث الإصدارات الشتوية"
+                  ? "أحدث أطقم الأطفال الشتوية"
                   : "جميع تشكيلات الدار"}
             </h1>
             <p className="mt-1 max-w-2xl text-xs text-[var(--text-muted)] sm:text-sm">
               {activeCategoryMeta
                 ? activeCategoryMeta.descriptionAr
-                : "تصفح جميع خطوط الدار من ملابس الأطفال الفليس والكارجو حتى الأساسيات الثقيلة وإصدارات الاستوديو."}
+                : "تشكيلة أزياء الأطفال متاحة الآن للطلب المباشر بمقاسات ٢ إلى ١٢ سنة، مع معاينة مسبقة لأقسام الشباب التي تُفتتح قريباً."}
             </p>
           </div>
           <p dir="ltr" className="font-en text-xs font-semibold tracking-wider text-[var(--text-muted)]">
@@ -121,7 +128,7 @@ export function ShopCatalogClient({
         </div>
       </div>
 
-      {/* Controls Bar: Slash Tabs + Search + Zara Grid Density Switcher */}
+      {/* Controls Bar: Slash Tabs + Search + Grid Density Switcher */}
       <div className="mt-6 space-y-4">
         <div className="flex flex-col justify-between gap-3 lg:flex-row lg:items-center">
           {/* Sub-brand pills */}
@@ -148,21 +155,26 @@ export function ShopCatalogClient({
             >
               وصل حديثاً
             </button>
-            {SUB_BRANDS.map((sb) => (
-              <button
-                key={sb}
-                type="button"
-                dir="ltr"
-                onClick={() => setSelectedSub(sb)}
-                className={`shrink-0 rounded-[4px] border px-3.5 py-2 font-en text-[11px] font-semibold tracking-[0.14em] transition-colors ${
-                  selectedSub === sb
-                    ? "border-[var(--brand-accent)] bg-[var(--brand-accent)] text-[#F6F5F2]"
-                    : "border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:border-[var(--text-primary)]"
-                }`}
-              >
-                {sb}
-              </button>
-            ))}
+            {SUB_BRANDS.map((sb) => {
+              const catMeta = categories.find((c) => c.subBrand === sb);
+              const soon = Boolean(catMeta?.openingSoon);
+              return (
+                <button
+                  key={sb}
+                  type="button"
+                  dir="ltr"
+                  onClick={() => setSelectedSub(sb)}
+                  className={`inline-flex shrink-0 items-center gap-1.5 rounded-[4px] border px-3.5 py-2 font-en text-[11px] font-semibold tracking-[0.14em] transition-colors ${
+                    selectedSub === sb
+                      ? "border-[var(--brand-accent)] bg-[var(--brand-accent)] text-[#F6F5F2]"
+                      : "border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:border-[var(--text-primary)]"
+                  }`}
+                >
+                  <span>{sb}</span>
+                  <span className="text-[9px] opacity-75">{soon ? "• SOON" : "• OPEN"}</span>
+                </button>
+              );
+            })}
           </div>
 
           {/* Search + View Switcher */}
@@ -176,7 +188,7 @@ export function ShopCatalogClient({
                 type="search"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="ابحث بالاسم أو الكود (MW-KD-01)..."
+                placeholder="ابحث بالاسم أو الكود (4302، 4303، 2306)..."
                 className="h-9 w-full rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] pr-9 pl-8 text-xs text-[var(--text-primary)] placeholder:text-[var(--text-muted)] outline-none focus:border-[var(--brand-accent)]"
               />
               {query && (
@@ -191,7 +203,7 @@ export function ShopCatalogClient({
               )}
             </div>
 
-            {/* Zara View Density Switcher */}
+            {/* Grid Density Switcher */}
             <div
               role="group"
               aria-label="طريقة عرض الشبكة"
@@ -242,11 +254,11 @@ export function ShopCatalogClient({
 
         {/* Secondary Fit / Age Filter */}
         <div className="no-scrollbar flex items-center gap-2 overflow-x-auto border-b border-[var(--border-subtle)] pb-4 text-xs">
-          <span className="shrink-0 text-[var(--text-muted)]">تصفية حسب القصّة والفئة:</span>
+          <span className="shrink-0 text-[var(--text-muted)]">تصفية حسب الفئة:</span>
           {[
             { id: "all", label: "الكل" },
-            { id: "kids", label: "أطفال (4-12 سنة)" },
-            { id: "adult", label: "شبابي ويونيسكس (S–XL)" },
+            { id: "kids", label: "أطفال — متاح الآن (2–12 سنة)" },
+            { id: "adult", label: "شبابي ويونيسكس (قريباً)" },
             { id: "oversized", label: "قصّة Oversized / Boxy" },
           ].map((f) => (
             <button
@@ -265,37 +277,66 @@ export function ShopCatalogClient({
         </div>
       </div>
 
-      {/* Product Grid */}
+      {/* Product Grid + Large Floating Opening Soon Board for Locked Youth Sections */}
       {filtered.length === 0 ? (
         <div className="my-16 rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-12 text-center">
           <p className="text-sm font-semibold text-[var(--text-primary)]">
             لا توجد قطع مطابقة لخيارات التصفية الحالية
           </p>
           <p className="mt-1 text-xs text-[var(--text-muted)]">
-            جرب إعادة ضبط الفلتر لاستعراض جميع خطوط MO WORLD المتاحة.
+            جرب العودة لقسم الأطفال المتاح حالياً أو إعادة ضبط الفلتر.
           </p>
           <button
             type="button"
             onClick={() => {
-              setSelectedSub("ALL");
+              setSelectedSub("MO / KIDS");
               setAgeFilter("all");
               setQuery("");
             }}
             className="mt-4 rounded-[4px] bg-[var(--brand-accent)] px-5 py-2.5 text-xs font-semibold text-[#F6F5F2] hover:bg-[var(--brand-accent-hover)]"
           >
-            عرض جميع القطع
+            تسوق قسم الأطفال المتاح الآن
           </button>
         </div>
       ) : (
-        <div className={`mt-8 grid ${gridClasses}`}>
-          {filtered.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              compact={gridDensity === "compact"}
-              onInspect={(p) => setInspected(p)}
-            />
-          ))}
+        <div className="relative mt-8">
+          <div
+            aria-hidden={isSectionOpeningSoon || undefined}
+            className={`grid ${gridClasses} transition-all duration-300 ${
+              isSectionOpeningSoon
+                ? "pointer-events-none min-h-[460px] select-none opacity-35 blur-[1.5px]"
+                : ""
+            }`}
+          >
+            {filtered.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                compact={gridDensity === "compact"}
+                onInspect={(p) => setInspected(p)}
+              />
+            ))}
+          </div>
+
+          {isSectionOpeningSoon && (
+            <div className="pointer-events-none absolute inset-0 z-20 flex items-start justify-center p-3 pt-10 sm:items-center sm:p-6">
+              <div className="sticky top-28 w-full flex justify-center">
+                <OpeningSoonBoard
+                  subBrandLabel={
+                    activeCategoryMeta
+                      ? `${activeCategoryMeta.subBrand} // PREVIEW ONLY`
+                      : "YOUTH & ADULT // PREVIEW ONLY"
+                  }
+                  titleEn="OPENING SOON"
+                  titleAr="هذا القسم يُفتتح قريباً"
+                  onSwitchToKids={() => {
+                    setSelectedSub("MO / KIDS");
+                    setAgeFilter("all");
+                  }}
+                />
+              </div>
+            </div>
+          )}
         </div>
       )}
 

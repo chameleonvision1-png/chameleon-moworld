@@ -10,10 +10,11 @@ export const metadata: Metadata = {
 };
 
 const KIDS_ROWS = [
-  { size: "4-5Y", height: "104 – 112 سم", chest: "38 سم", topLen: "45 سم", pantLen: "63 سم" },
-  { size: "6-7Y", height: "116 – 125 سم", chest: "41 سم", topLen: "50 سم", pantLen: "72 سم" },
-  { size: "8-9Y", height: "128 – 138 سم", chest: "44 سم", topLen: "55 سم", pantLen: "81 سم" },
-  { size: "10-12Y", height: "140 – 152 سم", chest: "48 سم", topLen: "61 سم", pantLen: "90 سم" },
+  { size: "2 – 5", height: "88 – 115 سم", chest: "33 – 39 سم", topLen: "38 – 47 سم", pantLen: "52 – 65 سم" },
+  { size: "6", height: "112 – 120 سم", chest: "40 سم", topLen: "49 سم", pantLen: "70 سم" },
+  { size: "8", height: "121 – 130 سم", chest: "43 سم", topLen: "53 سم", pantLen: "78 سم" },
+  { size: "10", height: "131 – 142 سم", chest: "46 سم", topLen: "58 سم", pantLen: "85 سم" },
+  { size: "12", height: "143 – 153 سم", chest: "49 سم", topLen: "63 سم", pantLen: "92 سم" },
 ];
 
 const ADULT_ROWS = [
@@ -89,7 +90,7 @@ export default async function SizeGuidePage() {
             MO / KIDS STREETWEAR
           </p>
           <h2 className="mt-1.5 text-lg font-bold text-[var(--text-primary)]">
-            مقاسات الأطفال والأطقم الكاملة (4-5Y – 10-12Y)
+            مقاسات الأطفال والأطقم الكاملة (مقاسات 2 – 12)
           </h2>
           <div className="mt-4 overflow-x-auto">
             <table className="w-full min-w-[300px] border-collapse text-right text-xs">

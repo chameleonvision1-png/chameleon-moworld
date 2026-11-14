@@ -16,11 +16,11 @@ interface HeaderProps {
 }
 
 const SLASH_NAV = [
-  { href: "/shop?filter=new", labelEn: "NEW DROPS", shortEn: "NEW" },
-  { href: "/shop?sub=MO+%2F+KIDS", labelEn: "MO / KIDS", shortEn: "KIDS" },
-  { href: "/shop?sub=MO+%2F+ESSENTIALS", labelEn: "MO / ESSENTIALS", shortEn: "ESSENTIALS" },
-  { href: "/shop?sub=MO+%2F+STUDIO", labelEn: "MO / STUDIO", shortEn: "STUDIO" },
-  { href: "/shop?sub=MO+%2F+ARCHIVE", labelEn: "MO / ARCHIVE", shortEn: "ARCHIVE" },
+  { href: "/shop?sub=MO+%2F+KIDS", labelEn: "MO / KIDS", shortEn: "KIDS", soon: false },
+  { href: "/shop?filter=new", labelEn: "NEW DROPS", shortEn: "NEW", soon: false },
+  { href: "/shop?sub=MO+%2F+ESSENTIALS", labelEn: "MO / ESSENTIALS", shortEn: "ESSENTIALS", soon: true },
+  { href: "/shop?sub=MO+%2F+STUDIO", labelEn: "MO / STUDIO", shortEn: "STUDIO", soon: true },
+  { href: "/shop?sub=MO+%2F+ARCHIVE", labelEn: "MO / ARCHIVE", shortEn: "ARCHIVE", soon: true },
 ];
 
 const SITE_LINKS = [
@@ -222,15 +222,20 @@ export function Header({ settings }: HeaderProps) {
                 <>
                   {/* Symmetric 2x2 Minimal Sub-Brand Pills */}
                   <div className="mt-4 grid grid-cols-2 gap-1.5">
-                    {SLASH_NAV.slice(1).map((sub) => (
+                    {[SLASH_NAV[0], SLASH_NAV[2], SLASH_NAV[3], SLASH_NAV[4]].map((sub) => (
                       <Link
                         key={sub.href}
                         href={sub.href}
                         onClick={closeDrawer}
                         dir="ltr"
-                        className="flex h-9 items-center justify-center rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)]/70 px-2 font-en text-[10px] font-semibold tracking-[0.14em] text-[var(--text-primary)] transition-colors hover:border-[var(--brand-accent)] hover:text-[var(--brand-accent)]"
+                        className={`flex h-9 items-center justify-between rounded-[4px] border px-2.5 font-en text-[9.5px] font-semibold tracking-[0.12em] transition-colors ${
+                          sub.soon
+                            ? "border-[var(--border-subtle)] bg-[var(--bg-surface)]/50 text-[var(--text-muted)] hover:border-[var(--text-primary)]"
+                            : "border-[var(--brand-accent)]/50 bg-[var(--bg-surface)] text-[var(--brand-accent)] hover:border-[var(--brand-accent)]"
+                        }`}
                       >
-                        {sub.labelEn}
+                        <span>{sub.shortEn}</span>
+                        <span className="text-[8px] opacity-80">{sub.soon ? "SOON" : "OPEN"}</span>
                       </Link>
                     ))}
                   </div>

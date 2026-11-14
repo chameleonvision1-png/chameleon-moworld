@@ -25,11 +25,16 @@ export async function POST(req: Request) {
       const validatedItems: OrderItem[] = [];
 
       for (const raw of rawItems) {
-        const product = db.products.find((p) => p.id === raw.productId);
+        const rawPid = String(raw.productId || "");
+        const bundleDropId = raw.dropId || (rawPid.startsWith("bundle:") ? rawPid.slice(7) : "");
+        const product = db.products.find((p) => p.id === rawPid);
         const qty = Math.max(1, Math.min(20, Number(raw.qty) || 1));
         if (product) {
+          if (product.comingSoon || !product.isAvailable) {
+            return { error: "عفواً، هذه القطعة معروضة للمعاينة المسبقة فقط وتُفتتح قريباً" };
+          }
           const color = product.colors.find((c) => c.id === raw.colorId) ?? product.colors[0];
-          const sizeLabel = String(raw.sizeLabel || product.sizes[0]?.label || "M");
+          const sizeLabel = String(raw.sizeLabel || product.sizes[0]?.label || "8");
           validatedItems.push({
             productId: product.id,
             code: product.code,
@@ -41,11 +46,14 @@ export async function POST(req: Request) {
             sizeLabel,
             unitPrice: product.price,
             qty,
-            image: color?.frontImage || "/images/products/bone-tee-front.webp",
+            image: color?.frontImage || "/images/products/kids-set-01-front.webp",
           });
-        } else if (raw.dropId) {
-          const drop = db.drops.find((d) => d.id === raw.dropId);
+        } else if (bundleDropId) {
+          const drop = db.drops.find((d) => d.id === bundleDropId);
           if (drop) {
+            if (drop.comingSoon || !drop.isActive) {
+              return { error: "عفواً، هذه الباكدج معروضة للمعاينة المسبقة فقط وتُفتتح قريباً" };
+            }
             validatedItems.push({
               productId: drop.id,
               code: drop.code,
@@ -54,7 +62,7 @@ export async function POST(req: Request) {
               colorId: "bundle",
               colorNameAr: "باكدج كاملة",
               colorHex: "#1F5668",
-              sizeLabel: String(raw.sizeLabel || "M"),
+              sizeLabel: String(raw.sizeLabel || "8"),
               unitPrice: drop.price,
               qty,
               image: drop.image,

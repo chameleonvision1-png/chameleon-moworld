@@ -35,6 +35,7 @@ export async function POST(req: Request) {
         ? body.careNotes
         : ["غسيل بماء بارد ٣٠ درجة على الوجه الداخلي", "معاينة الأوردر عند الاستلام"],
       isAvailable: body.isAvailable !== false,
+      comingSoon: Boolean(body.comingSoon),
       isFeatured: Boolean(body.isFeatured),
       isNewDrop: Boolean(body.isNewDrop),
       onHeroRail: Boolean(body.onHeroRail),

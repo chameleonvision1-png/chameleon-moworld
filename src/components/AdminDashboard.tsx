@@ -915,23 +915,40 @@ export function AdminDashboard({
                 <div className="rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-primary)] p-4">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <span className="text-xs font-bold">المقاسات والمخزون</span>
-                    <div className="flex gap-2">
+                    <div className="flex flex-wrap gap-2">
                       <button
                         type="button"
                         onClick={() =>
                           setEditingProduct({
                             ...editingProduct,
                             sizes: [
-                              { id: "4-5y", label: "4-5Y", stock: 12 },
-                              { id: "6-7y", label: "6-7Y", stock: 15 },
-                              { id: "8-9y", label: "8-9Y", stock: 15 },
-                              { id: "10-12y", label: "10-12Y", stock: 12 },
+                              { id: "6", label: "6", stock: 12 },
+                              { id: "8", label: "8", stock: 15 },
+                              { id: "10", label: "10", stock: 15 },
+                              { id: "12", label: "12", stock: 12 },
                             ],
                           })
                         }
                         className="rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-2.5 py-1 text-[11px]"
                       >
-                        قالب مقاسات أطفال (4-12Y)
+                        مقاسات أطفال (6–12)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setEditingProduct({
+                            ...editingProduct,
+                            sizes: [
+                              { id: "2", label: "2", stock: 10 },
+                              { id: "3", label: "3", stock: 14 },
+                              { id: "4", label: "4", stock: 14 },
+                              { id: "5", label: "5", stock: 12 },
+                            ],
+                          })
+                        }
+                        className="rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-2.5 py-1 text-[11px]"
+                      >
+                        مقاسات أطفال (2–5)
                       </button>
                       <button
                         type="button"
@@ -948,7 +965,7 @@ export function AdminDashboard({
                         }
                         className="rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-2.5 py-1 text-[11px]"
                       >
-                        قالب مقاسات شبابي (S–XL)
+                        مقاسات شبابي (S–XL)
                       </button>
                     </div>
                   </div>
@@ -980,7 +997,8 @@ export function AdminDashboard({
                 {/* Flags */}
                 <div className="flex flex-wrap gap-5 text-xs">
                   {[
-                    { key: "isAvailable", label: "متاح للطلب" },
+                    { key: "isAvailable", label: "معروض بالموقع" },
+                    { key: "comingSoon", label: "قريباً (Coming Soon — قفل الشراء)" },
                     { key: "isFeatured", label: "ضمن مختارات الرئيسية" },
                     { key: "isNewDrop", label: "علامة NEW DROP" },
                     { key: "onHeroRail", label: "عرض على استاند الهيرو" },

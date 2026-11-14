@@ -5,8 +5,8 @@ import Link from "next/link";
 import { ArrowLeft, Ruler } from "lucide-react";
 
 export function SizeGuideCalculator() {
-  const [mode, setMode] = React.useState<"adult" | "kids">("adult");
-  const [height, setHeight] = React.useState("175");
+  const [mode, setMode] = React.useState<"adult" | "kids">("kids");
+  const [height, setHeight] = React.useState("124");
   const [weight, setWeight] = React.useState("74");
   const [fitPref, setFitPref] = React.useState<"regular" | "oversized">("oversized");
 
@@ -15,10 +15,14 @@ export function SizeGuideCalculator() {
     const w = Number(weight) || 0;
 
     if (mode === "kids") {
-      if (h <= 112) return { size: "4-5Y", note: "مناسب لطول ١٠٤–١١٢ سم براحة كاملة للحركة" };
-      if (h <= 125) return { size: "6-7Y", note: "مناسب لطول ١١٣–١٢٥ سم مع طول أكمام متوازن" };
-      if (h <= 138) return { size: "8-9Y", note: "مناسب لطول ١٢٦–١٣٨ سم بقصّة Relaxed" };
-      return { size: "10-12Y", note: "مناسب لطول ١٣٩–١٥٢ سم (ولأطول من ١٥٣ سم ننصح بمقاس S شبابي)" };
+      if (h <= 94) return { size: "2", note: "مناسب لطول ٨٨–٩٤ سم (سنتين — كود 2306)" };
+      if (h <= 101) return { size: "3", note: "مناسب لطول ٩٥–١٠١ سم (٣ سنوات — كود 2306)" };
+      if (h <= 108) return { size: "4", note: "مناسب لطول ١٠٢–١٠٨ سم (٤ سنوات)" };
+      if (h <= 114) return { size: "5 / 6", note: "مقاس 5 لطقم 2306 أو مقاس 6 لباقي الأطقم" };
+      if (h <= 120) return { size: "6", note: "مناسب لطول ١١٢–١٢٠ سم براحة كاملة للحركة" };
+      if (h <= 130) return { size: "8", note: "مناسب لطول ١٢١–١٣٠ سم مع طول أكمام وبنطلون متوازن" };
+      if (h <= 142) return { size: "10", note: "مناسب لطول ١٣١–١٤٢ سم بقصّة Relaxed مريحة" };
+      return { size: "12", note: "مناسب لطول ١٤٣–١٥٣ سم (١١–١٢ سنة)" };
     }
 
     const idx =

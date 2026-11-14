@@ -29,6 +29,8 @@ export interface RailGarment {
   sideImage?: string;
   /** Short hang-tag text such as a price or a size. */
   tag?: string;
+  /** Marks preview-only items that cannot be purchased yet. */
+  comingSoon?: boolean;
   /** Short facts listed in the detail view. */
   details?: string[];
 }
@@ -431,7 +433,17 @@ function RealRailSwivelHook() {
   );
 }
 
-function BoutiqueHangTag({ label, tagRef, topPx }: { label: string; tagRef: (node: HTMLSpanElement | null) => void; topPx: number }) {
+function BoutiqueHangTag({
+  label,
+  comingSoon = false,
+  tagRef,
+  topPx,
+}: {
+  label: string;
+  comingSoon?: boolean;
+  tagRef: (node: HTMLSpanElement | null) => void;
+  topPx: number;
+}) {
   return (
     <span
       ref={tagRef}
@@ -456,7 +468,11 @@ function BoutiqueHangTag({ label, tagRef, topPx }: { label: string; tagRef: (nod
 
       {/* Architectural MO WORLD cardstock hang-tag centered accurately beneath the cord */}
       <span
-        className="relative block -translate-x-1/2 whitespace-nowrap rounded-[3px] border border-foreground/18 bg-card px-2 pb-1.5 pt-2.5 text-[9.5px] font-semibold leading-none tracking-[0.04em] text-card-foreground tabular-nums"
+        className={`relative block -translate-x-1/2 whitespace-nowrap rounded-[3px] border px-2 pb-1.5 pt-2.5 text-[9px] font-semibold leading-none tracking-[0.06em] tabular-nums ${
+          comingSoon
+            ? "border-[#1F5668]/60 bg-[#0A0C0E] text-[#F6F5F2]"
+            : "border-foreground/18 bg-card text-card-foreground"
+        }`}
         style={{
           marginTop: 28,
           boxShadow: "0 4px 10px -2px rgba(0,0,0,0.14), 0 1px 2px rgba(0,0,0,0.08)",
@@ -1277,9 +1293,23 @@ export function ClothingRailHero({
                 {item.tag && (
                   <BoutiqueHangTag
                     label={item.tag}
+                    comingSoon={item.comingSoon}
                     tagRef={(node) => { tags.current[i] = node; }}
                     topPx={(18.6 / VB_H) * h}
                   />
+                )}
+                {item.comingSoon && turned && (
+                  <span
+                    dir="ltr"
+                    className="pointer-events-none absolute inset-x-3 top-[46%] z-30 flex -translate-y-1/2 flex-col items-center rounded-[4px] border border-white/18 bg-[#0A0C0E]/85 px-2.5 py-2 text-center backdrop-blur-md"
+                  >
+                    <span className="font-en text-[9.5px] font-semibold tracking-[0.22em] text-[#F6F5F2]">
+                      COMING SOON
+                    </span>
+                    <span dir="rtl" className="mt-0.5 text-[9.5px] font-medium text-[#F6F5F2]/80">
+                      يُفتتح قريباً
+                    </span>
+                  </span>
                 )}
               </span>
             </button>
@@ -1541,6 +1571,19 @@ function Detail({
             </div>
           ))}
         </div>
+        {item.comingSoon && (
+          <div
+            dir="ltr"
+            className="pointer-events-none absolute inset-x-6 top-[46%] z-20 flex -translate-y-1/2 flex-col items-center rounded-[4px] border border-white/18 bg-[#0A0C0E]/86 px-4 py-3 text-center shadow-[0_20px_50px_-15px_rgba(0,0,0,0.55)] backdrop-blur-md"
+          >
+            <span className="font-en text-xs font-semibold tracking-[0.26em] text-[#F6F5F2]">
+              COMING SOON
+            </span>
+            <span dir="rtl" className="mt-1 text-xs font-medium text-[#F6F5F2]/80">
+              معاينة مسبقة — غير متاح للشراء حالياً
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );

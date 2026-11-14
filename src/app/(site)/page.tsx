@@ -28,7 +28,7 @@ export default async function HomePage() {
               أقسام الدار الأربعة
             </h2>
             <p className="mt-1 text-xs text-[var(--text-muted)] sm:text-sm">
-              أربعة خطوط متكاملة للأطفال والشباب تحت سقف واحد.
+              قسم أزياء الأطفال مفتوح للطلب الآن — وباقي الأقسام الشبابية قريباً الافتتاح.
             </p>
           </div>
 
@@ -36,27 +36,43 @@ export default async function HomePage() {
             {data.categories.map((cat) => {
               const count = availableProducts.filter((p) => p.subBrand === cat.subBrand).length;
               const shortBadge = cat.subBrand.replace("MO / ", "");
+              const isSoon = Boolean(cat.openingSoon);
               return (
                 <Link
                   key={cat.id}
                   href={`/shop?sub=${encodeURIComponent(cat.subBrand)}`}
-                  className="group flex flex-col justify-between rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-primary)] p-3.5 transition-colors hover:border-[var(--brand-accent)] sm:p-5"
+                  className={`group relative flex flex-col justify-between rounded-[4px] border p-3.5 transition-colors sm:p-5 ${
+                    isSoon
+                      ? "border-[var(--border-subtle)] bg-[var(--bg-primary)]/75 hover:border-[var(--text-muted)]"
+                      : "border-[var(--brand-accent)]/55 bg-[var(--bg-primary)] hover:border-[var(--brand-accent)]"
+                  }`}
                 >
                   <div>
                     <div className="flex items-center justify-between gap-1.5">
                       <span
                         dir="ltr"
-                        className="font-en text-[10px] font-bold tracking-[0.16em] text-[var(--brand-accent)] sm:text-xs"
+                        className={`font-en text-[10px] font-bold tracking-[0.16em] sm:text-xs ${
+                          isSoon ? "text-[var(--text-muted)]" : "text-[var(--brand-accent)]"
+                        }`}
                       >
                         <span className="sm:hidden">{shortBadge}</span>
                         <span className="hidden sm:inline">{cat.subBrand}</span>
                       </span>
-                      <span
-                        dir="ltr"
-                        className="rounded-[3px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-1.5 py-0.5 font-en text-[10px] font-semibold text-[var(--text-muted)]"
-                      >
-                        {count}
-                      </span>
+                      {isSoon ? (
+                        <span
+                          dir="ltr"
+                          className="rounded-[3px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-1.5 py-0.5 font-en text-[9px] font-semibold tracking-[0.12em] text-[var(--text-muted)]"
+                        >
+                          OPENING SOON
+                        </span>
+                      ) : (
+                        <span
+                          dir="ltr"
+                          className="rounded-[3px] bg-[var(--brand-accent)] px-1.5 py-0.5 font-en text-[9px] font-semibold tracking-[0.12em] text-[#F6F5F2]"
+                        >
+                          OPEN • {count}
+                        </span>
+                      )}
                     </div>
                     <h3 className="mt-2.5 text-sm font-bold text-[var(--text-primary)] sm:text-base">
                       {cat.nameAr}
@@ -66,8 +82,14 @@ export default async function HomePage() {
                     </p>
                   </div>
 
-                  <div className="mt-4 flex items-center justify-between border-t border-[var(--border-subtle)] pt-2.5 text-[11px] font-semibold text-[var(--text-primary)] group-hover:text-[var(--brand-accent)] sm:text-xs">
-                    <span>تصفح القسم</span>
+                  <div
+                    className={`mt-4 flex items-center justify-between border-t border-[var(--border-subtle)] pt-2.5 text-[11px] font-semibold sm:text-xs ${
+                      isSoon
+                        ? "text-[var(--text-muted)] group-hover:text-[var(--text-primary)]"
+                        : "text-[var(--brand-accent)]"
+                    }`}
+                  >
+                    <span>{isSoon ? "معاينة القسم — قريباً" : "تسوق القسم الآن"}</span>
                     <ArrowLeft className="size-3.5 shrink-0 transition-transform group-hover:-translate-x-0.5" strokeWidth={1.5} />
                   </div>
                 </Link>
@@ -139,10 +161,10 @@ export default async function HomePage() {
               {/* Side-by-Side Equal Action Buttons */}
               <div className="mx-auto mt-6 grid w-full max-w-[320px] grid-cols-2 gap-2.5 sm:max-w-sm lg:mx-0">
                 <Link
-                  href="/shop"
+                  href="/shop?sub=MO+%2F+KIDS"
                   className="inline-flex h-10 items-center justify-center gap-1.5 rounded-[4px] bg-[var(--brand-accent)] px-3 text-xs font-semibold text-[#F6F5F2] whitespace-nowrap transition-colors hover:bg-[var(--brand-accent-hover)]"
                 >
-                  <span>تسوق التشكيلة</span>
+                  <span>تسوق قسم الأطفال</span>
                   <ArrowLeft className="size-3.5 shrink-0" strokeWidth={1.5} />
                 </Link>
                 <Link

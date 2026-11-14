@@ -37,6 +37,7 @@ export interface Category {
   nameEn: string;
   descriptionAr: string;
   sortOrder: number;
+  openingSoon?: boolean;
 }
 
 export interface Product {
@@ -56,6 +57,7 @@ export interface Product {
   sizes: GarmentSize[];
   careNotes: string[];
   isAvailable: boolean;
+  comingSoon?: boolean;
   isFeatured: boolean;
   isNewDrop: boolean;
   onHeroRail: boolean;
@@ -85,6 +87,7 @@ export interface DropBundle {
   startsAt: string;
   endsAt: string;
   isActive: boolean;
+  comingSoon?: boolean;
   includedProductIds?: string[];
 }
 
@@ -145,6 +148,7 @@ export interface Settings {
 }
 
 export interface DB {
+  catalogVersion?: number;
   settings: Settings;
   categories: Category[];
   products: Product[];

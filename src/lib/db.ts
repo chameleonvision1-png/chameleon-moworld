@@ -113,7 +113,8 @@ const LEGACY_CATEGORY_TITLES: Record<string, { nameAr: string; descriptionAr: st
   },
 };
 
-function sanitizeLegacySeed(db: DB): DB {
+function sanitizeLegacySeed(db: DB): { db: DB; migrated: boolean } {
+  let migrated = false;
   const s = db.settings;
   if (s.phone === "01024885590") s.phone = "";
   if (s.whatsapp === "201024885590") s.whatsapp = "";
@@ -129,9 +130,13 @@ function sanitizeLegacySeed(db: DB): DB {
   if (s.workingHoursAr === "يومياً من ١٢ ظهراً حتى ١١ مساءً") {
     s.workingHoursAr = "الطلب أونلاين متاح ٢٤ ساعة — توصيل لجميع المحافظات";
   }
-  if (s.announcementAr?.startsWith("WINTER DROP // MO WORLD")) {
-    s.announcementAr = "شحن مجاني للطلبات فوق ٢٬٥٠٠ ج.م • معاينة عند الاستلام";
+  if (
+    s.announcementAr?.startsWith("WINTER DROP // MO WORLD") ||
+    s.announcementAr === "شحن مجاني للطلبات فوق ٢٬٥٠٠ ج.م • معاينة عند الاستلام"
+  ) {
+    s.announcementAr = "تشكيلة MO / KIDS الشتوية متاحة الآن • شحن مجاني فوق ٢٬٥٠٠ ج.م";
   }
+
   for (const cat of db.categories) {
     const mapped = LEGACY_CATEGORY_TITLES[cat.nameAr];
     if (mapped) {
@@ -139,7 +144,21 @@ function sanitizeLegacySeed(db: DB): DB {
       cat.descriptionAr = mapped.descriptionAr;
     }
   }
-  return db;
+
+  if ((db.catalogVersion ?? 0) < 2) {
+    const seed = buildSeed();
+    // Preserve any merchant-created custom items (uid("p_") / uid("drop_"))
+    const customProducts = (db.products || []).filter((p) => p.id.startsWith("p_") || p.id.startsWith("prd_"));
+    const customDrops = (db.drops || []).filter((d) => d.id.startsWith("drop_") || d.id.startsWith("drp_"));
+    db.categories = seed.categories;
+    db.products = [...seed.products, ...customProducts];
+    db.drops = [...seed.drops, ...customDrops];
+    db.settings.taglineAr = seed.settings.taglineAr;
+    db.catalogVersion = 2;
+    migrated = true;
+  }
+
+  return { db, migrated };
 }
 
 export async function readDB(forceFresh = false): Promise<DB> {
@@ -148,13 +167,24 @@ export async function readDB(forceFresh = false): Promise<DB> {
   }
   const remote = await readSupabaseDB();
   if (remote) {
-    sanitizeLegacySeed(remote);
+    const { migrated } = sanitizeLegacySeed(remote);
+    if (migrated) {
+      await writeSupabaseDB(remote);
+    }
     memoryCache = { db: remote, ts: Date.now() };
     return structuredClone(remote);
   }
-  const local = sanitizeLegacySeed(readLocalDB());
+  const rawLocal = readLocalDB();
+  const { db: local, migrated } = sanitizeLegacySeed(rawLocal);
+  if (migrated) {
+    try {
+      writeLocalDB(local);
+    } catch {
+      // Ignore read-only FS errors
+    }
+  }
   memoryCache = { db: local, ts: Date.now() };
-  return local;
+  return structuredClone(local);
 }
 
 export function updateDB<T>(fn: (db: DB) => T): Promise<T> {
