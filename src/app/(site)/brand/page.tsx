@@ -78,49 +78,49 @@ export default function BrandAtelierPage() {
         <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div className="flex flex-col justify-between rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6">
             <span dir="ltr" className="text-right font-en text-[10px] font-semibold tracking-[0.2em] text-[var(--text-muted)]">
-              01 // ICON SEAL
+              01 // LOGO ICON
+            </span>
+            <div className="my-8 flex items-center justify-center">
+              <BrandLogo variant="monogram" className="h-14 w-auto" />
+            </div>
+            <p className="text-xs text-[var(--text-muted)]">
+              أيقونة الشعار المختصرة (MO) للعلامات المنسوجة والأختام المعدنية والمساحات المحدودة.
+            </p>
+          </div>
+
+          <div className="flex flex-col justify-between rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6">
+            <span dir="ltr" className="text-right font-en text-[10px] font-semibold tracking-[0.2em] text-[var(--text-muted)]">
+              02 // CIRCULAR SEAL
             </span>
             <div className="my-8 flex items-center justify-center">
               <BrandLogo variant="icon" className="h-20 w-20" />
             </div>
             <p className="text-xs text-[var(--text-muted)]">
-              أيقونة الحسابات الرسمية والأختام الدائرية وإكسسوارات السحاب.
+              ختم الحسابات الرسمية وصور العرض المربعة وإكسسوارات السحاب.
             </p>
           </div>
 
           <div className="flex flex-col justify-between rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6">
             <span dir="ltr" className="text-right font-en text-[10px] font-semibold tracking-[0.2em] text-[var(--text-muted)]">
-              02 // STACKED LOCKUP
+              03 // FULL LOGO
             </span>
             <div className="my-8 flex items-center justify-center">
-              <BrandLogo variant="stacked" className="h-20 w-auto" />
+              <BrandLogo variant="full" className="h-11 w-auto" />
             </div>
             <p className="text-xs text-[var(--text-muted)]">
-              التكوين الرأسي الرسمي للتيكت القطني وعلب الهدايا وأغلفة الكتالوج.
+              الشعار الكامل المعتمد لشريط التصفح الرئيسي، التيكت القطني، علب الهدايا وأكياس الشحن.
             </p>
           </div>
 
           <div className="flex flex-col justify-between rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6">
             <span dir="ltr" className="text-right font-en text-[10px] font-semibold tracking-[0.2em] text-[var(--text-muted)]">
-              03 // DISPLAY WORDMARK
+              04 // DISPLAY WORDMARK
             </span>
             <div className="my-8 flex items-center justify-center">
-              <BrandLogo variant="wordmark" className="h-9 w-auto" />
+              <BrandLogo variant="wordmark" className="h-8 w-auto" />
             </div>
             <p className="text-xs text-[var(--text-muted)]">
-              الكلمة الكاملة لتطريز الصدر البارز وعناوين الحملات الموسمية.
-            </p>
-          </div>
-
-          <div className="flex flex-col justify-between rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6">
-            <span dir="ltr" className="text-right font-en text-[10px] font-semibold tracking-[0.2em] text-[var(--text-muted)]">
-              04 // HEADER LOCKUP
-            </span>
-            <div className="my-8 flex items-center justify-center">
-              <BrandLogo variant="horizontal" className="h-9 w-auto" />
-            </div>
-            <p className="text-xs text-[var(--text-muted)]">
-              التوقيع الأفقي المعتمد لشريط التصفح الرئيسي وأكياس الشحن والفواتير.
+              الكلمة المنحوتة لتطريز الصدر البارز وعناوين الحملات الموسمية.
             </p>
           </div>
         </div>

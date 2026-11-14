@@ -186,7 +186,7 @@ export function AdminDashboard({
           className="w-full max-w-sm rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 sm:p-8"
         >
           <div className="flex flex-col items-center text-center">
-            <BrandLogo variant="stacked" className="h-16 w-auto" />
+            <BrandLogo variant="full" className="h-11 w-auto" />
             <p dir="ltr" className="micro-label mt-4 text-[var(--brand-accent)]">
               ADMINISTRATION CONSOLE
             </p>
@@ -402,7 +402,7 @@ export function AdminDashboard({
       <header className="sticky top-0 z-30 border-b border-[var(--border-subtle)] bg-[var(--bg-primary)]/95 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3">
-            <BrandLogo variant="horizontal" className="h-7 w-auto" />
+            <BrandLogo variant="full" className="h-8 w-auto" />
             <span className="hidden rounded-[4px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-2 py-0.5 text-[11px] font-semibold text-[var(--brand-accent)] sm:inline-block">
               لوحة الإدارة
             </span>

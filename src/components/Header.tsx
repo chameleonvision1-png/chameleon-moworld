@@ -69,7 +69,7 @@ export function Header({ settings }: HeaderProps) {
             aria-label="MO WORLD — الصفحة الرئيسية"
             className="inline-flex shrink-0 items-center py-1 outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-accent)]"
           >
-            <BrandLogo variant="horizontal" className="h-7 w-auto sm:h-8" />
+            <BrandLogo variant="full" className="h-8 w-auto sm:h-9" />
           </Link>
 
           <nav
@@ -167,7 +167,7 @@ export function Header({ settings }: HeaderProps) {
           >
             <div>
               <div className="flex items-center justify-between border-b border-[var(--border-subtle)] pb-4">
-                <BrandLogo variant="horizontal" className="h-7 w-auto" />
+                <BrandLogo variant="full" className="h-8 w-auto" />
                 <button
                   type="button"
                   onClick={closeDrawer}

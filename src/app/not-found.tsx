@@ -5,7 +5,7 @@ import { BrandLogo } from "@/components/BrandLogo";
 export default function NotFound() {
   return (
     <div className="flex min-h-svh flex-col items-center justify-center bg-[var(--bg-primary)] px-4 text-center text-[var(--text-primary)]">
-      <BrandLogo variant="stacked" className="h-20 w-auto" />
+      <BrandLogo variant="monogram" className="h-14 w-auto" />
       <p dir="ltr" className="micro-label mt-6 text-[var(--brand-accent)]">
         ERROR 404 // PAGE NOT FOUND
       </p>

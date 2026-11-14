@@ -14,12 +14,9 @@ export function Footer({
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
           {/* Column 1: Brand Identity */}
           <div className="space-y-4">
-            <BrandLogo variant="horizontal" className="h-8 w-auto" />
+            <BrandLogo variant="full" className="h-9 w-auto" />
             <p className="text-xs leading-relaxed text-[var(--text-muted)]">
               من MO Children&apos;s World إلى الهوية الشاملة MO WORLD — دار أزياء عصرية تجمع بين خامات القطن المصري الثقيل والقصّات المعمارية الهادئة للأطفال والشباب.
-            </p>
-            <p dir="ltr" className="font-en text-[10px] tracking-[0.22em] text-[var(--brand-accent)]">
-              FRONTIER FASHION HUB
             </p>
           </div>
 
