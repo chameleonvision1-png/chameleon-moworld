@@ -63,8 +63,8 @@ export interface ClothingRailHeroProps extends React.ComponentProps<"section"> {
 const VB_W = 200;
 const VB_H = 310;
 const ASPECT = VB_W / VB_H;
-const HOOK_TOP = 4;
-const RAIL_R = 4.6;
+const HOOK_TOP = 6.35;
+const RAIL_R = 4.65;
 const REST = -70;
 const PERSPECTIVE = 1100;
 const GAP = 0.035;
@@ -354,11 +354,32 @@ function Defs({ uid }: { uid: string }) {
           <stop offset="1" stopColor="black" stopOpacity="0" />
         </linearGradient>
         <linearGradient id={`${uid}-chrome`} gradientUnits="userSpaceOnUse" x1="98.5" x2="101.7" y1="0" y2="0">
-          <stop offset="0" stopColor="color-mix(in oklab, white 45%, gray)" />
-          <stop offset="0.35" stopColor="white" />
-          <stop offset="0.78" stopColor="color-mix(in oklab, gray 65%, black)" />
-          <stop offset="1" stopColor="color-mix(in oklab, gray 75%, white)" />
+          <stop offset="0" stopColor="#8F969E" />
+          <stop offset="0.34" stopColor="#FFFFFF" />
+          <stop offset="0.76" stopColor="#4A5058" />
+          <stop offset="1" stopColor="#B8BEC6" />
         </linearGradient>
+        <linearGradient id={`${uid}-hook-wire`} gradientUnits="userSpaceOnUse" x1="96" x2="104" y1="0" y2="2">
+          <stop offset="0" stopColor="#9DA4AC" />
+          <stop offset="0.28" stopColor="#FFFFFF" />
+          <stop offset="0.55" stopColor="#C8CFD6" />
+          <stop offset="0.82" stopColor="#454B53" />
+          <stop offset="1" stopColor="#AEB5BD" />
+        </linearGradient>
+        <linearGradient id={`${uid}-swivel-chrome`} x1="0" x2="1" y1="0" y2="0">
+          <stop offset="0" stopColor="#6E757E" />
+          <stop offset="0.26" stopColor="#F8FAFC" />
+          <stop offset="0.46" stopColor="#D3D9E0" />
+          <stop offset="0.78" stopColor="#3F454D" />
+          <stop offset="1" stopColor="#9EA5AE" />
+        </linearGradient>
+        <clipPath id={`${uid}-behind-rail`}>
+          <rect x="-20" y="-30" width="240" height={HOOK_TOP - RAIL_R + 30.2} />
+          <rect x="-20" y={HOOK_TOP + RAIL_R - 0.15} width="240" height="60" />
+        </clipPath>
+        <clipPath id={`${uid}-on-rail`}>
+          <rect x="-20" y={HOOK_TOP - RAIL_R} width="240" height={RAIL_R * 2} />
+        </clipPath>
         <pattern id={`${uid}-rib`} width="2.6" height="8" patternUnits="userSpaceOnUse">
           <rect width="1.1" height="8" fill="black" fillOpacity="0.2" />
           <rect x="1.3" width="0.7" height="8" fill="white" fillOpacity="0.08" />
@@ -396,6 +417,76 @@ function Hook({ uid }: { uid: string }) {
       <rect x="96" y="27" width="8" height="9" rx="2" fill={`url(#${uid}-chrome)`} />
       <rect x="97.2" y="28.2" width="2" height="6.6" rx="1" fill="white" fillOpacity="0.5" />
     </>
+  );
+}
+
+function RealRailSwivelHook() {
+  return (
+    <img
+      src="/images/rail/real-hook-rail.webp"
+      alt=""
+      draggable={false}
+      className="pointer-events-none absolute inset-x-0 top-0 z-20 h-[10%] w-full select-none object-contain object-top"
+    />
+  );
+}
+
+function BoutiqueHangTag({ label, tagRef, topPx }: { label: string; tagRef: (node: HTMLSpanElement | null) => void; topPx: number }) {
+  return (
+    <span
+      ref={tagRef}
+      aria-hidden="true"
+      className="pointer-events-none absolute left-1/2 z-30 font-en"
+      style={{ top: topPx, transformOrigin: "0px 0px", transform: "rotate(-22deg)" }}
+    >
+      {/* Back strand of the waxed cotton cord going behind the cardstock top edge */}
+      <svg
+        viewBox="0 0 20 38"
+        className="pointer-events-none absolute left-0 top-[-1px] h-[38px] w-[20px] -translate-x-1/2 overflow-visible"
+      >
+        <path
+          d="M 9.3,1.8 Q 7.8,16.0 9.55,29.2"
+          fill="none"
+          stroke="currentColor"
+          strokeOpacity="0.42"
+          strokeWidth="0.9"
+          strokeLinecap="round"
+        />
+      </svg>
+
+      {/* Architectural MO WORLD cardstock hang-tag centered accurately beneath the cord */}
+      <span
+        className="relative block -translate-x-1/2 whitespace-nowrap rounded-[3px] border border-foreground/18 bg-card px-2 pb-1.5 pt-2.5 text-[9.5px] font-semibold leading-none tracking-[0.04em] text-card-foreground tabular-nums"
+        style={{
+          marginTop: 28,
+          boxShadow: "0 4px 10px -2px rgba(0,0,0,0.14), 0 1px 2px rgba(0,0,0,0.08)",
+        }}
+      >
+        {label}
+      </span>
+
+      {/* Cinch knot on the metal swivel neck + front cord strand threading directly INTO the grommet eyelet */}
+      <svg
+        viewBox="0 0 20 38"
+        className="pointer-events-none absolute left-0 top-[-1px] z-10 h-[38px] w-[20px] -translate-x-1/2 overflow-visible"
+      >
+        {/* Snug loop & cinch knot around the chrome swivel neck */}
+        <ellipse cx="10" cy="1.2" rx="1.65" ry="0.78" fill="none" stroke="currentColor" strokeOpacity="0.58" strokeWidth="1.0" />
+        <circle cx="10" cy="1.95" r="1.0" className="fill-foreground/65" />
+        {/* Punched metallic grommet eyelet on the hang-tag */}
+        <circle cx="10" cy="33.2" r="2.1" className="fill-background stroke-foreground/40" strokeWidth="0.85" />
+        <circle cx="10" cy="33.2" r="1.05" className="fill-foreground/55" />
+        {/* Front waxed cotton strand crossing over the top lip of the tag and threading right into the eyelet hole */}
+        <path
+          d="M 10.65,2.0 Q 12.1,16.5 10.15,33.1"
+          fill="none"
+          stroke="currentColor"
+          strokeOpacity="0.62"
+          strokeWidth="1.0"
+          strokeLinecap="round"
+        />
+      </svg>
+    </span>
   );
 }
 
@@ -528,12 +619,13 @@ function SideArt({ uid, kind, color, trim }: { uid: string; kind: GarmentKind; c
   );
 }
 
-function Photo({ src, alt, full }: { src: string; alt: string; full: boolean }) {
+function Photo({ src, alt, full, clipHook = false }: { src: string; alt: string; full: boolean; clipHook?: boolean }) {
   return (
     <img
       src={src}
       alt={alt}
       draggable={false}
+      style={clipHook ? { clipPath: "inset(7.24% 0 0 0)" } : undefined}
       className={`pointer-events-none absolute inset-x-0 bottom-0 size-auto w-full select-none object-contain object-top ${full ? "top-0 h-full" : "top-[8%] h-[92%]"}`}
     />
   );
@@ -680,12 +772,13 @@ export function ClothingRailHero({
     const tu = turns.current[i];
     const sd = sides.current[i];
     if (tu) {
-      tu.style.transform = `perspective(${PERSPECTIVE}px) rotateY(${angle.toFixed(2)}deg)`;
-      tu.style.opacity = sd ? clamp((e - 0.44) / 0.12, 0, 1).toFixed(3) : "1";
+      const tuAngle = sd ? angle * 1.08 : angle;
+      tu.style.transform = `perspective(${PERSPECTIVE}px) rotateY(${tuAngle.toFixed(2)}deg)`;
+      tu.style.opacity = sd ? clamp((e - 0.24) / 0.24, 0, 1).toFixed(3) : "1";
     }
     if (sd) {
-      sd.style.opacity = clamp((0.56 - e) / 0.12, 0, 1).toFixed(3);
-      sd.style.transform = `perspective(${PERSPECTIVE}px) rotateY(${(Math.min(1, e * 2) * -84).toFixed(2)}deg)`;
+      sd.style.opacity = clamp((0.5 - e) / 0.24, 0, 1).toFixed(3);
+      sd.style.transform = `perspective(${PERSPECTIVE}px) rotateY(${(clamp(e / 0.52, 0, 1) * -52).toFixed(2)}deg)`;
     }
     const lag = clamp(-(s.vswing[i] ?? 0) * 0.018, -5, 5);
     const dr = drapes.current[i];
@@ -695,7 +788,7 @@ export function ClothingRailHero({
     const shadow = shadows.current[i];
     if (shadow) shadow.style.transform = `translate3d(${(w * 0.05).toFixed(1)}px, ${(h * 0.035).toFixed(1)}px, 0) scaleX(${Math.max(0.12, Math.abs(Math.cos((angle * Math.PI) / 180))).toFixed(3)})`;
     const tag = tags.current[i];
-    if (tag) tag.style.transform = `rotate(${(-12 + (s.tag[i] ?? 0)).toFixed(2)}deg)`;
+    if (tag) tag.style.transform = `rotate(${(-22 + (s.tag[i] ?? 0)).toFixed(2)}deg)`;
   }, []);
 
   const step = React.useCallback(function stepLoop(now: number) {
@@ -972,8 +1065,8 @@ export function ClothingRailHero({
   const current = active === null ? null : items[active];
   const h = size.h;
   const boxW = h * ASPECT;
-  const railY = Math.round(h * 0.07) + 10;
-  const railR = Math.max(3, Math.round((RAIL_R / VB_H) * h * 10) / 10);
+  const railY = Math.round(h * 0.07) + 12;
+  const railR = Math.max(3.4, (RAIL_R / VB_H) * h);
   const bottom = count ? Math.max(...items.map((item) => (item.image ? VB_H : SIDE[item.kind ?? "tee"].hem + 8))) / VB_H : 1;
 
   return (
@@ -1029,31 +1122,79 @@ export function ClothingRailHero({
         onKeyDown={onKeyDown}
       >
         <div aria-hidden="true" data-rail className="pointer-events-none absolute inset-x-0 z-0" style={{ top: railY - railR, height: railR * 2 }}>
-          <div className="absolute inset-x-0 h-3 rounded-full bg-foreground/10 blur-[5px]" style={{ top: railR * 2 + 1 }} />
+          {/* Realistic studio wall cast shadow directly below the cylindrical bar */}
           <div
-            className="absolute inset-0 rounded-full"
+            className="absolute inset-x-[18px] rounded-full bg-black/14 blur-[5px] dark:bg-black/45"
+            style={{ top: railR * 2 + 2, height: Math.max(6, railR * 1.35) }}
+          />
+
+          {/* Seamless Cylindrical Brushed Stainless-Steel Boutique Bar (seated strictly inside the left/right socket collars) */}
+          <div
+            className="absolute inset-y-0 left-[18px] right-[18px]"
             style={{
               background:
-                "linear-gradient(to bottom, color-mix(in oklab, var(--color-muted-foreground) 35%, white) 0%, white 18%, color-mix(in oklab, var(--color-muted-foreground) 70%, white) 38%, var(--color-muted-foreground) 62%, color-mix(in oklab, var(--color-muted-foreground) 55%, black) 100%)",
-              boxShadow: "0 1px 0 color-mix(in oklab, var(--color-foreground) 18%, transparent)",
+                "linear-gradient(to bottom, #9AA1A9 0%, #EEF1F4 15%, #FFFFFF 26%, #CFD5DC 43%, #737B84 65%, #4A5058 85%, #8D949C 100%)",
+              boxShadow:
+                "inset 0 0.5px 0 rgba(255,255,255,0.75), inset 0 -0.5px 0 rgba(0,0,0,0.35), 0 1.5px 3px rgba(0,0,0,0.16)",
             }}
           />
+          {/* Continuous overhead softbox specular sheen */}
           <div
-            className="absolute inset-0 rounded-full opacity-40 mix-blend-overlay"
-            style={{ background: "repeating-linear-gradient(90deg, transparent 0 2px, color-mix(in oklab, white 40%, transparent) 2px 3px, transparent 3px 7px)" }}
+            className="absolute left-[22px] right-[22px] rounded-full opacity-75"
+            style={{
+              top: "19%",
+              height: Math.max(1.2, railR * 0.24),
+              background: "linear-gradient(90deg, rgba(255,255,255,0.2), rgba(255,255,255,0.92) 12%, rgba(255,255,255,0.92) 88%, rgba(255,255,255,0.2))",
+            }}
           />
-          {[0, 1].map((side) => (
+
+          {/* Left & Right Machined Architectural Wall Flanges + Cylindrical Socket Collars */}
+          {([0, 1] as const).map((isRight) => (
             <div
-              key={side}
-              className="absolute top-1/2 h-7 w-4 -translate-y-1/2 rounded-[3px]"
-              style={{
-                [side ? "right" : "left"]: 6,
-                background: "linear-gradient(to right, color-mix(in oklab, var(--color-muted-foreground) 60%, white), var(--color-muted-foreground) 55%, color-mix(in oklab, var(--color-muted-foreground) 60%, black))",
-                boxShadow: "0 3px 6px color-mix(in oklab, var(--color-foreground) 18%, transparent)",
-              }}
+              key={isRight}
+              className="absolute top-1/2 flex -translate-y-1/2 items-center"
+              style={{ [isRight ? "right" : "left"]: 6, flexDirection: isRight ? "row-reverse" : "row" }}
             >
-              <span className="absolute left-1/2 top-1 size-1 -translate-x-1/2 rounded-full bg-foreground/35" />
-              <span className="absolute bottom-1 left-1/2 size-1 -translate-x-1/2 rounded-full bg-foreground/35" />
+              {/* Brushed steel wall mounting plate with recessed hex bolts */}
+              <div
+                className="relative z-10 h-[32px] w-[15px] rounded-[2.5px]"
+                style={{
+                  background:
+                    "linear-gradient(180deg, #B8BFC7 0%, #EFF2F5 22%, #8A929B 56%, #525861 86%, #777E87 100%)",
+                  boxShadow:
+                    "0 4px 9px rgba(0,0,0,0.22), inset 0 0 0 0.75px rgba(255,255,255,0.55), 0 0 0 0.5px rgba(20,24,28,0.35)",
+                }}
+              >
+                <span
+                  className="absolute left-1/2 top-[4.5px] size-[3.5px] -translate-x-1/2 rounded-full"
+                  style={{
+                    background: "radial-gradient(circle at 35% 35%, #3C424A, #1B1E23)",
+                    boxShadow: "0 0.5px 0 rgba(255,255,255,0.65)",
+                  }}
+                />
+                <span
+                  className="absolute bottom-[4.5px] left-1/2 size-[3.5px] -translate-x-1/2 rounded-full"
+                  style={{
+                    background: "radial-gradient(circle at 35% 35%, #3C424A, #1B1E23)",
+                    boxShadow: "0 0.5px 0 rgba(255,255,255,0.65)",
+                  }}
+                />
+              </div>
+
+              {/* Stepped cylindrical socket sleeve receiving the steel tube */}
+              <div
+                className="relative z-10 w-[7px] rounded-[1.5px]"
+                style={{
+                  height: Math.round(railR * 2 + 5),
+                  marginLeft: isRight ? 0 : -1,
+                  marginRight: isRight ? -1 : 0,
+                  background:
+                    "linear-gradient(to bottom, #8D949C 0%, #F4F6F8 22%, #BFC6CE 45%, #5C636C 74%, #3D4249 90%, #7C838B 100%)",
+                  boxShadow: isRight
+                    ? "-1.5px 0 2px rgba(0,0,0,0.28), 0 2px 4px rgba(0,0,0,0.18)"
+                    : "1.5px 0 2px rgba(0,0,0,0.28), 0 2px 4px rgba(0,0,0,0.18)",
+                }}
+              />
             </div>
           ))}
         </div>
@@ -1093,13 +1234,22 @@ export function ClothingRailHero({
               }}
             >
               <span ref={(node) => { swings.current[i] = node; }} className="absolute inset-0" style={{ transformOrigin: `50% ${(HOOK_TOP / VB_H) * 100}%` }}>
+                {item.image && hanger === "none" && <RealRailSwivelHook />}
                 <span aria-hidden="true" className="pointer-events-none absolute inset-0" style={{ filter: `blur(${Math.max(3, h * 0.022).toFixed(1)}px)` }}>
-                  <span ref={(node) => { shadows.current[i] = node; }} className={`absolute block bg-black opacity-[0.14] ${item.image ? photoBox : "inset-0"}`} style={{ WebkitMask: `${mask} top center / contain no-repeat`, mask: `${mask} top center / contain no-repeat` }} />
+                  <span
+                    ref={(node) => { shadows.current[i] = node; }}
+                    className={`absolute block bg-black opacity-[0.14] ${item.image ? photoBox : "inset-0"}`}
+                    style={{
+                      clipPath: item.image && hanger === "none" ? "inset(7.24% 0 0 0)" : undefined,
+                      WebkitMask: `${mask} top center / contain no-repeat`,
+                      mask: `${mask} top center / contain no-repeat`,
+                    }}
+                  />
                 </span>
                 {(item.sideImage || !item.image) && (
                   <span ref={(node) => { sides.current[i] = node; }} data-face="side" className="absolute inset-0" style={{ transform: `perspective(${PERSPECTIVE}px) rotateY(0deg)` }}>
                     <SideHanger uid={uid} material={hanger} />
-                    {item.sideImage ? <Photo src={item.sideImage} alt="" full={hanger === "none"} /> : <SideArt uid={uid} kind={kind} color={color} trim={trim} />}
+                    {item.sideImage ? <Photo src={item.sideImage} alt="" full={hanger === "none"} clipHook={hanger === "none"} /> : <SideArt uid={uid} kind={kind} color={color} trim={trim} />}
                   </span>
                 )}
                 <span ref={(node) => { turns.current[i] = node; }} data-turn className="absolute inset-0 rounded-[4px] [transform-style:preserve-3d]" style={{ transform: `perspective(${PERSPECTIVE}px) rotateY(${REST}deg)`, opacity: item.image && !item.sideImage ? 1 : 0 }}>
@@ -1108,21 +1258,28 @@ export function ClothingRailHero({
                       <Hanger uid={uid} side={side} kind={item.image ? null : kind} material={hanger} />
                       <span ref={side === "front" ? (node) => { drapes.current[i] = node; } : undefined} data-drape className="absolute inset-0 origin-top [transform:skewX(var(--drape,0deg))]" style={side === "back" ? { transform: "skewX(calc(var(--drape, 0deg) * -1))" } : undefined}>
                         {item.image
-                          ? <Photo src={(side === "back" ? item.backImage : undefined) ?? item.image} alt="" full={hanger === "none"} />
+                          ? <Photo src={(side === "back" ? item.backImage : undefined) ?? item.image} alt="" full={hanger === "none"} clipHook={hanger === "none"} />
                           : <Fabric uid={uid} kind={kind} side={side} color={color} trim={trim} />}
-                        <span ref={side === "front" ? (node) => { shades.current[i] = node; } : undefined} className={`pointer-events-none absolute bg-black ${item.image ? photoBox : "inset-0"}`} style={{ opacity: "var(--shade, 0.2)", WebkitMask: `${item.image ? `url("${(side === "back" ? item.backImage : undefined) ?? item.image}")` : silhouetteMask(kind, side)} top center / contain no-repeat`, mask: `${item.image ? `url("${(side === "back" ? item.backImage : undefined) ?? item.image}")` : silhouetteMask(kind, side)} top center / contain no-repeat` }} />
+                        <span
+                          ref={side === "front" ? (node) => { shades.current[i] = node; } : undefined}
+                          className={`pointer-events-none absolute bg-black ${item.image ? photoBox : "inset-0"}`}
+                          style={{
+                            clipPath: item.image && hanger === "none" ? "inset(7.24% 0 0 0)" : undefined,
+                            opacity: "var(--shade, 0.2)",
+                            WebkitMask: `${item.image ? `url("${(side === "back" ? item.backImage : undefined) ?? item.image}")` : silhouetteMask(kind, side)} top center / contain no-repeat`,
+                            mask: `${item.image ? `url("${(side === "back" ? item.backImage : undefined) ?? item.image}")` : silhouetteMask(kind, side)} top center / contain no-repeat`,
+                          }}
+                        />
                       </span>
                     </span>
                   ))}
                 </span>
                 {item.tag && (
-                  <span ref={(node) => { tags.current[i] = node; }} aria-hidden="true" className="pointer-events-none absolute left-1/2 origin-top font-en" style={{ top: (32 / VB_H) * h, transform: "rotate(-12deg)" }}>
-                    <span className="block h-[14px] w-px translate-x-[3px] bg-foreground/35" />
-                    <span className="block -translate-x-1/2 translate-x-[3px] whitespace-nowrap rounded-[3px] border border-foreground/15 bg-card px-1.5 pb-1 pt-2 text-[9px] font-semibold leading-none tracking-wide text-card-foreground">
-                      <span className="absolute left-1/2 top-[3px] size-[3px] -translate-x-1/2 rounded-full bg-foreground/30" />
-                      {item.tag}
-                    </span>
-                  </span>
+                  <BoutiqueHangTag
+                    label={item.tag}
+                    tagRef={(node) => { tags.current[i] = node; }}
+                    topPx={(18.6 / VB_H) * h}
+                  />
                 )}
               </span>
             </button>
@@ -1335,7 +1492,7 @@ function Detail({
         className="absolute left-1/2 top-[-40vh] h-[40vh] w-[3px] -translate-x-1/2 rounded-full"
         style={{
           background: "linear-gradient(to right, color-mix(in oklab, var(--color-muted-foreground) 50%, white), var(--color-muted-foreground), color-mix(in oklab, var(--color-muted-foreground) 50%, black))",
-          top: `calc(-40vh + ${(HOOK_TOP / VB_H) * 100}%)`,
+          top: `calc(-40vh + ${(3.6 / VB_H) * 100}%)`,
         }}
       />
       <div
